@@ -1,5 +1,6 @@
 import { Elysia } from "elysia";
 import postgres from "postgres";
+import { logger } from "@bogeychan/elysia-logger";
 
 const sql = postgres(process.env.DATABASE_URL!, {
   max: 1,
@@ -7,6 +8,11 @@ const sql = postgres(process.env.DATABASE_URL!, {
 });
 
 const app = new Elysia()
+  .use(
+    logger({
+      level: "error",
+    })
+  )
   .onError(({ set, error, code }) => {
     switch (code) {
       case "VALIDATION":
