@@ -25,10 +25,11 @@ const app = new Elysia()
     const [lat, lon] = params.coordinate.split(",");
 
     let location =
-      await sql`SELECT * FROM kel_desa WHERE st_intersects(geom, ST_SetSRID(ST_MakePoint(${lon}, ${lat}), 104199));`;
+      await sql`SELECT ST_AsGeoJSON(t) AS geojson_feature FROM (SELECT * FROM kel_desa WHERE st_intersects(geom, ST_SetSRID(ST_MakePoint(${lon}, ${lat}), 104199))) AS t`;
 
     if (location.length === 0) {
-      location = await sql`SELECT * FROM kecamatan WHERE st_intersects(geom, ST_SetSRID(ST_MakePoint(${lon}, ${lat}), 104199));`;
+      location =
+        await sql`SELECT ST_AsGeoJSON(t) AS geojson_feature FROM (SELECT * FROM kecamatan WHERE st_intersects(geom, ST_SetSRID(ST_MakePoint(${lon}, ${lat}), 104199))) AS t`;
     }
 
     if (location.length === 0) {
@@ -38,7 +39,7 @@ const app = new Elysia()
       };
     }
 
-    return location[0];
+    return location[0].geojson_feature;
   })
   .listen(process.env.PORT!);
 
