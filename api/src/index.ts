@@ -71,6 +71,8 @@ const app = new Elysia()
       };
     }
 
+    set.headers["Cache-Control"] = "public, max-age=31536000, immutable"; // 1 year
+
     return {
       ...attributes,
       batas: {
