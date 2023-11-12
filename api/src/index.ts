@@ -22,17 +22,15 @@ const app = new Elysia()
           message: "Invalid coordinate",
         };
       default:
-        log.error(error.message);
+        log?.error(error.message || "Unknown error");
         set.status = 500;
         return {
           message: error.message,
         };
     }
   })
-  .get("/api/up", async () => {
-    return {
-      message: "Ok",
-    };
+  .get("/up", async () => {
+    return "";
   })
   .get("/api/v1/area/:coordinate", async ({ set, params }) => {
     const [lat, lon] = params.coordinate.split(",");
