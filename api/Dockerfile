@@ -1,32 +1,20 @@
-FROM debian:11.6-slim as builder
+FROM oven/bun:1 as base
+WORKDIR /usr/src/app
 
-WORKDIR /app
+FROM base AS install
+RUN mkdir -p /temp/prod
+COPY package.json bun.lockb /temp/prod/
+RUN cd /temp/prod && bun install --frozen-lockfile --production
 
+# copy production dependencies and source code into final image
+FROM base AS release
 RUN apt update
-RUN apt install curl unzip -y
-
-RUN curl https://bun.sh/install | bash
-
-COPY package.json .
-COPY bun.lockb .
-
-RUN /root/.bun/bin/bun install --production
-
-# ? -------------------------
-FROM gcr.io/distroless/base
-
-WORKDIR /app
-
-COPY --from=builder /root/.bun/bin/bun bun
-COPY --from=builder /app/node_modules node_modules
-
+RUN apt install -y curl
+COPY --from=install /temp/prod/ ./
 COPY src src
 COPY tsconfig.json .
-# COPY public public
 
-ENV PORT 3000
-
-ENV NODE_ENV production
-CMD ["./bun", "src/index.ts"]
-
-EXPOSE 3000
+# run the app
+USER bun
+EXPOSE 3000/tcp
+ENTRYPOINT [ "bun", "run", "src/index.ts" ]

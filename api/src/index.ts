@@ -27,6 +27,11 @@ const app = new Elysia()
         };
     }
   })
+  .get("/up", async () => {
+    return {
+      message: "Ok",
+    };
+  })
   .get("/area/:coordinate", async ({ set, params }) => {
     const [lat, lon] = params.coordinate.split(",");
 
