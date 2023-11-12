@@ -22,19 +22,19 @@ const app = new Elysia()
           message: "Invalid coordinate",
         };
       default:
+        log.error(error.cause, error.message);
         set.status = 500;
-        log.error(error.cause, error.message)
         return {
           message: "Internal server error",
         };
     }
   })
-  .get("/up", async () => {
+  .get("/api/up", async () => {
     return {
       message: "Ok",
     };
   })
-  .get("/area/:coordinate", async ({ set, params }) => {
+  .get("/api/v1/area/:coordinate", async ({ set, params }) => {
     const [lat, lon] = params.coordinate.split(",");
 
     let kelDesa =
