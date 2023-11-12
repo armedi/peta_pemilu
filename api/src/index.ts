@@ -1,6 +1,7 @@
 import { Elysia } from "elysia";
 import postgres from "postgres";
 import { logger } from "@bogeychan/elysia-logger";
+import { PlainObject, omit } from "moderndash";
 
 const sql = postgres(process.env.DATABASE_URL!, {
   max: 1,
@@ -13,7 +14,7 @@ const app = new Elysia()
       level: "error",
     })
   )
-  .onError(({ set, error, code }) => {
+  .onError(({ set, error, code, log }) => {
     switch (code) {
       case "VALIDATION":
         set.status = 400;
@@ -22,6 +23,7 @@ const app = new Elysia()
         };
       default:
         set.status = 500;
+        log.error(error.cause, error.message)
         return {
           message: "Internal server error",
         };
@@ -35,22 +37,49 @@ const app = new Elysia()
   .get("/area/:coordinate", async ({ set, params }) => {
     const [lat, lon] = params.coordinate.split(",");
 
-    let location =
-      await sql`SELECT ST_AsGeoJSON(t) AS geojson_feature FROM (SELECT * FROM kel_desa WHERE st_intersects(geom, ST_SetSRID(ST_MakePoint(${lon}, ${lat}), 104199))) AS t`;
+    let kelDesa =
+      await sql`SELECT kode_kd, kode_kec, kode_kk, kode_prov, kel_desa, kecamatan, kab_kota, provinsi, ST_AsGeoJSON(geom) AS geojson FROM kel_desa WHERE st_intersects(geom, ST_SetSRID(ST_MakePoint(${lon}, ${lat}), 104199))`;
 
-    if (location.length === 0) {
-      location =
-        await sql`SELECT ST_AsGeoJSON(t) AS geojson_feature FROM (SELECT * FROM kecamatan WHERE st_intersects(geom, ST_SetSRID(ST_MakePoint(${lon}, ${lat}), 104199))) AS t`;
-    }
+    let kecamatanPromise =
+      kelDesa.length === 0
+        ? sql`SELECT kode_kec, kode_kk, kode_prov, kecamatan, kab_kota, provinsi, ST_AsGeoJSON(ST_Simplify(geom, 0.0001)) AS geojson FROM kecamatan WHERE st_intersects(geom, ST_SetSRID(ST_MakePoint(${lon}, ${lat}), 104199))`
+        : sql`SELECT ST_AsGeoJSON(ST_Simplify(geom, 0.0001)) AS geojson FROM kecamatan WHERE kode_kec = ${kelDesa[0].kode_kec}`;
 
-    if (location.length === 0) {
+    // only await kecamatanPromise here if we really need to,
+    // otherwise it's only awaited on the Promise.all below
+    const attributes: any = omit(
+      (kelDesa.length === 0
+        ? (await kecamatanPromise)[0]
+        : kelDesa[0]) as PlainObject,
+      ["geojson"]
+    );
+
+    const [kecamatan, kabKota, provinsi] = await Promise.all([
+      kecamatanPromise,
+      sql`SELECT ST_AsGeoJSON(ST_Simplify(geom, 0.001)) AS geojson FROM kab_kota WHERE kode_kk = ${attributes.kode_kk}`,
+      sql`SELECT ST_AsGeoJSON(ST_Simplify(geom, 0.01)) AS geojson FROM provinsi WHERE kode_prov = ${attributes.kode_prov}`,
+    ]);
+
+    if (
+      [kelDesa.length, kecamatan.length, kabKota.length, provinsi.length].every(
+        (x) => x === 0
+      )
+    ) {
       set.status = 404;
       return {
         message: "Area not found",
       };
     }
 
-    return location[0].geojson_feature;
+    return {
+      ...attributes,
+      batas: {
+        kel_desa: kelDesa[0] ? JSON.parse(kelDesa[0].geojson) : null,
+        kecamatan: JSON.parse(kecamatan[0].geojson),
+        kab_kota: JSON.parse(kabKota[0].geojson),
+        provinsi: JSON.parse(provinsi[0].geojson),
+      },
+    };
   })
   .listen(process.env.PORT!);
 

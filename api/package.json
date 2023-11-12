@@ -8,6 +8,7 @@
   "dependencies": {
     "@bogeychan/elysia-logger": "^0.0.12",
     "elysia": "latest",
+    "moderndash": "^3.8.0",
     "postgres": "^3.4.1"
   },
   "devDependencies": {
