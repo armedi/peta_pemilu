@@ -22,10 +22,10 @@ const app = new Elysia()
           message: "Invalid coordinate",
         };
       default:
-        log.error(error.cause, error.message);
+        log.error(error.message);
         set.status = 500;
         return {
-          message: "Internal server error",
+          message: error.message,
         };
     }
   })

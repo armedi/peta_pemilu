@@ -1,0 +1,12 @@
+name: Delete package versions
+on: workflow_dispatch
+jobs:
+  delete-package-versions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/delete-package-versions@v4.1.1
+        with:
+          package-name: 'wilayah'
+          package-type: 'container'
+          min-versions-to-keep: 2
+          token: ${{ secrets.PAT }}
