@@ -1,6 +1,5 @@
 {
-  "name": "wilayah",
-  "version": "1.0.50",
+  "name": "@wilayah/api",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "bun run --watch src/index.ts"

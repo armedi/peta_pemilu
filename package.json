@@ -1,0 +1,6 @@
+{
+  "name": "wilayah",
+  "workspaces": [
+    "api"
+  ]
+}
