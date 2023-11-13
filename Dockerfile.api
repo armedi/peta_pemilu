@@ -4,6 +4,7 @@ WORKDIR /usr/src/app
 FROM base AS install
 RUN mkdir -p /temp/prod
 COPY package.json bun.lockb /temp/prod/
+COPY api/package.json /temp/prod/api/
 RUN cd /temp/prod && bun install --frozen-lockfile --production
 
 # copy production dependencies and source code into final image
@@ -11,10 +12,11 @@ FROM base AS release
 RUN apt update
 RUN apt install -y curl
 COPY --from=install /temp/prod/ ./
-COPY src src
-COPY tsconfig.json .
+COPY api/tsconfig.json api/
+COPY api/src api/src
 
 # run the app
+WORKDIR /usr/src/app/api
 USER bun
 EXPOSE 3000/tcp
 ENTRYPOINT [ "bun", "run", "src/index.ts" ]
