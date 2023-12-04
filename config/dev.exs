@@ -3,9 +3,8 @@ import Config
 # Configure your database
 config :peta_pemilu, PetaPemilu.Repo,
   username: "postgres",
-  password: "postgres",
   hostname: "localhost",
-  database: "peta_pemilu_dev",
+  database: "batas_wilayah",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10

@@ -7,6 +7,12 @@
 # General application configuration
 import Config
 
+config :peta_pemilu, PetaPemilu.Repo,
+  database: "peta_pemilu_repo",
+  username: "user",
+  password: "pass",
+  hostname: "localhost"
+
 config :peta_pemilu,
   ecto_repos: [PetaPemilu.Repo],
   generators: [timestamp_type: :utc_datetime]
