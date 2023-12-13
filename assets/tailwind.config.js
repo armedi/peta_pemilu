@@ -8,6 +8,9 @@ const path = require("path")
 module.exports = {
   content: [
     "./js/**/*.js",
+    "./js/**/*.jsx",
+    "./js/**/*.ts",
+    "./js/**/*.tsx",
     "../lib/peta_pemilu_web.ex",
     "../lib/peta_pemilu_web/**/*.*ex"
   ],

@@ -17,7 +17,7 @@ defmodule PetaPemiluWeb.Router do
   scope "/", PetaPemiluWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/", Pages.Index
   end
 
   scope "/api/v1", PetaPemiluWeb do
