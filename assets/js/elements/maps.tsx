@@ -1,9 +1,14 @@
 import "preact/debug";
 
-import { useSignal, type Signal } from '@preact/signals';
-import type { LatLngExpression } from "leaflet";
+import {
+  useSignal,
+  useSignalEffect,
+  type Signal
+} from "@preact/signals";
+import { type LatLngExpression, type Map as LeafletMap } from "leaflet";
 import type { ViewHook } from "phoenix_live_view";
 import register from "preact-custom-element";
+import { useRef } from "preact/hooks";
 import {
   MapContainer,
   Marker,
@@ -12,12 +17,12 @@ import {
   useMapEvents,
 } from "react-leaflet";
 
-const tagName = "x-maps"
+const tagName = "x-maps";
 
 const liveViewHooks = new WeakMap<Element, ViewHook>();
 
 function getLiveViewHook(from: HTMLElement) {
-  const xMaps = from.closest(tagName)!
+  const xMaps = from.closest(tagName)!;
   return liveViewHooks.get(xMaps)!;
 }
 
@@ -28,20 +33,16 @@ export const phxHooks = {
     },
     destroyed(this: ViewHook) {
       liveViewHooks.delete(this.el);
-    }
+    },
   },
 };
 
-type MapEventsProps = {
-  center: Signal<LatLngExpression>
-}
-
-function MapEvents(props: MapEventsProps) {
+function MapEvents(props: { center: Signal<LatLngExpression> }) {
   useMapEvents({
     click(e) {
       const lv = getLiveViewHook(e.originalEvent.target as HTMLElement);
-      lv.pushEvent("click", { latlng: e.latlng }, (reply, ref) => {
-        props.center.value = reply.center
+      lv.pushEvent("select_point", e.latlng, (reply, ref) => {
+        props.center.value = reply.center;
       });
     },
   });
@@ -49,11 +50,23 @@ function MapEvents(props: MapEventsProps) {
   return null;
 }
 
-function Maps() {
-  const center = useSignal<LatLngExpression>([0, 118]);
+function Maps(props: Record<string, string>) {
+  const mapRef = useRef<LeafletMap>(null);
+
+  const center = useSignal<LatLngExpression>(JSON.parse(props.center));
+  const zoom = useSignal<number>(JSON.parse(props.zoom));
+
+  useSignalEffect(() => {
+    mapRef.current?.setView(center.value);
+  });
 
   return (
-    <MapContainer center={center.value} zoom={5} className="h-full">
+    <MapContainer
+      ref={mapRef}
+      center={center.value}
+      zoom={zoom.value}
+      className="h-full"
+    >
       <MapEvents center={center} />
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

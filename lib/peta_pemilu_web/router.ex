@@ -18,6 +18,7 @@ defmodule PetaPemiluWeb.Router do
     pipe_through :browser
 
     live "/", Pages.Index
+    live "/:map_view", Pages.Index
   end
 
   scope "/api/v1", PetaPemiluWeb do
