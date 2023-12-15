@@ -5,13 +5,7 @@ import { type LatLngExpression, type Map as LeafletMap } from "leaflet";
 import type { ViewHook } from "phoenix_live_view";
 import register from "preact-custom-element";
 import { useRef } from "preact/hooks";
-import {
-  MapContainer,
-  Marker,
-  Popup,
-  TileLayer,
-  useMapEvents,
-} from "react-leaflet";
+import { GeoJSON, MapContainer, TileLayer, useMapEvents } from "react-leaflet";
 
 const tagName = "x-maps";
 
@@ -33,13 +27,16 @@ export const phxHooks = {
   },
 };
 
-function MapEvents(props: { center: Signal<LatLngExpression> }) {
+function MapEvents(props: { center: Signal<LatLngExpression>; areas: Signal }) {
   useMapEvents({
     click(e) {
       props.center.value = e.latlng;
       getLiveViewHook(e.originalEvent.target as HTMLElement).pushEvent(
         "select_map_point",
-        e.latlng
+        e.latlng,
+        ({ data }) => {
+          props.areas.value = data;
+        }
       );
     },
   });
@@ -52,6 +49,7 @@ function Maps(props: Record<string, string>) {
 
   const center = useSignal<LatLngExpression>(JSON.parse(props.center));
   const zoom = useSignal<number>(JSON.parse(props.zoom));
+  const areas = useSignal<any[]>([]);
 
   useSignalEffect(() => {
     mapRef.current?.setView(center.value);
@@ -64,16 +62,18 @@ function Maps(props: Record<string, string>) {
       zoom={zoom.value}
       className="h-full"
     >
-      <MapEvents center={center} />
+      <MapEvents center={center} areas={areas} />
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Marker position={center.value}>
-        <Popup>
-          A pretty CSS3 popup. <br /> Easily customizable.
-        </Popup>
-      </Marker>
+      {areas.value.map((area) => (
+        <GeoJSON
+          style={{ weight: 0 }}
+          key={area.kd || area.kode_kec || area.kode_kk || area.kode_prov}
+          data={area.boundaries}
+        />
+      ))}
     </MapContainer>
   );
 }

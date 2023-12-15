@@ -21,12 +21,6 @@ defmodule PetaPemiluWeb.Router do
     live "/:map_view", Pages.Index
   end
 
-  scope "/api/v1", PetaPemiluWeb do
-    pipe_through :api
-
-    get "/area", AreaController, :index
-  end
-
   # Other scopes may use custom stacks.
   # scope "/api", PetaPemiluWeb do
   #   pipe_through :api

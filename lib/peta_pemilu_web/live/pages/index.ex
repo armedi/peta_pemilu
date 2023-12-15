@@ -48,7 +48,24 @@ defmodule PetaPemiluWeb.Pages.Index do
     rounded_lng = if is_float(lng), do: Float.round(lng, 6), else: lng
     zoom = socket.assigns.zoom
 
-    {:noreply,
+    zoom_levels = [
+      {15.0, 4},
+      {13.0, 3},
+      {11.0, 2},
+      {0.0, 1}
+    ]
+
+    geo_jsons =
+      Enum.reduce(zoom_levels, [], fn {z, lvl}, acc ->
+        if zoom >= z do
+          {:ok, result} = PetaPemilu.Area.geo_json(rounded_lat, rounded_lng, lvl)
+          [result | acc]
+        else
+          acc
+        end
+      end)
+
+    {:reply, %{"data" => geo_jsons},
      socket
      |> assign(lat: lat, lng: lng)
      |> push_patch(to: "/@#{rounded_lat},#{rounded_lng},#{zoom}z")}
