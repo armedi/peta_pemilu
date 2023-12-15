@@ -1,10 +1,6 @@
 import "preact/debug";
 
-import {
-  useSignal,
-  useSignalEffect,
-  type Signal
-} from "@preact/signals";
+import { useSignal, useSignalEffect, type Signal } from "@preact/signals";
 import { type LatLngExpression, type Map as LeafletMap } from "leaflet";
 import type { ViewHook } from "phoenix_live_view";
 import register from "preact-custom-element";
@@ -40,10 +36,11 @@ export const phxHooks = {
 function MapEvents(props: { center: Signal<LatLngExpression> }) {
   useMapEvents({
     click(e) {
-      const lv = getLiveViewHook(e.originalEvent.target as HTMLElement);
-      lv.pushEvent("select_point", e.latlng, (reply, ref) => {
-        props.center.value = reply.center;
-      });
+      props.center.value = e.latlng;
+      getLiveViewHook(e.originalEvent.target as HTMLElement).pushEvent(
+        "select_map_point",
+        e.latlng
+      );
     },
   });
 
