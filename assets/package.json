@@ -1,0 +1,24 @@
+{
+  "name": "assets",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Armedi",
+  "license": "ISC",
+  "dependencies": {
+    "@preact/signals": "^1.2.2",
+    "leaflet": "^1.9.4",
+    "moderndash": "^3.9.0",
+    "preact": "^10.19.3",
+    "preact-custom-element": "^4.3.0",
+    "react-leaflet": "^4.2.1"
+  },
+  "devDependencies": {
+    "@types/leaflet": "^1.9.8",
+    "@types/phoenix_live_view": "^0.18.4",
+    "@types/preact-custom-element": "^4.0.4"
+  }
+}
