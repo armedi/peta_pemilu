@@ -30,10 +30,19 @@ export const phxHooks = {
 function MapEvents(props: { center: Signal<LatLngExpression>; areas: Signal }) {
   useMapEvents({
     click(e) {
-      props.center.value = e.latlng;
       getLiveViewHook(e.originalEvent.target as HTMLElement).pushEvent(
         "select_map_point",
         e.latlng,
+        ({ data }) => {
+          props.areas.value = data;
+        }
+      );
+    },
+    zoom(e) {
+      const map = e.target as LeafletMap;
+      getLiveViewHook(map.getContainer()).pushEvent(
+        "zoom_map",
+        { zoom: map.getZoom() },
         ({ data }) => {
           props.areas.value = data;
         }
@@ -67,13 +76,23 @@ function Maps(props: Record<string, string>) {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {areas.value.map((area) => (
-        <GeoJSON
-          style={{ weight: 0 }}
-          key={area.kd || area.kode_kec || area.kode_kk || area.kode_prov}
-          data={area.boundaries}
-        />
-      ))}
+      {areas.value.map((area, idx) => {
+        const color =
+          idx === 0
+            ? "red"
+            : idx === 1
+              ? "blue"
+              : idx === 2
+                ? "darkred"
+                : "yellow";
+        return (
+          <GeoJSON
+            style={{ weight: 0, color }}
+            key={area.kode_kd || area.kode_kec || area.kode_kk || area.kode_prov}
+            data={area.boundaries}
+          />
+        );
+      })}
     </MapContainer>
   );
 }
