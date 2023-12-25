@@ -17,8 +17,8 @@ defmodule PetaPemiluWeb.Router do
   scope "/", PetaPemiluWeb do
     pipe_through :browser
 
-    live "/", Pages.Index
-    live "/:map_view", Pages.Index
+    live "/", Live.Index
+    live "/:map_view", Live.Index
   end
 
   # Other scopes may use custom stacks.

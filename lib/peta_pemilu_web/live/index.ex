@@ -1,4 +1,4 @@
-defmodule PetaPemiluWeb.Pages.Index do
+defmodule PetaPemiluWeb.Live.Index do
   use PetaPemiluWeb, :live_view
   require Jason
 
