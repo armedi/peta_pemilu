@@ -18,6 +18,13 @@ defmodule PetaPemiluWeb.Router do
     pipe_through :browser
 
     live "/", Live.Index
+
+    get "/calon", CandidateController, :index
+    get "/calon/dpd/:id", CandidateController, :show
+    get "/calon/dpr/:id", CandidateController, :show
+    get "/calon/dprd-prov/:id", CandidateController, :show
+    get "/calon/dprd-kabko/:id", CandidateController, :show
+
     live "/:map_view", Live.Index
   end
 
