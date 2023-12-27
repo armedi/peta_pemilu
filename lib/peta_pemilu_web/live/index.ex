@@ -1,5 +1,6 @@
 defmodule PetaPemiluWeb.Live.Index do
   use PetaPemiluWeb, :live_view
+  alias PetaPemilu.Area
   require Jason
 
   def render(assigns) do
@@ -43,30 +44,14 @@ defmodule PetaPemiluWeb.Live.Index do
     {:noreply, socket}
   end
 
-  defp get_geo_jsons(lat, lng, zoom) do
-    zoom_levels = [
-      {11.0, 4},
-      {9.0, 3},
-      {7.0, 2},
-      {0.0, 1}
-    ]
-
-    Enum.reduce(zoom_levels, [], fn {z, lvl}, acc ->
-      if zoom >= z do
-        {:ok, result} = PetaPemilu.Area.geo_json(lat, lng, lvl)
-        [result | acc]
-      else
-        acc
-      end
-    end)
-  end
-
   def handle_event("select_map_point", %{"lat" => lat, "lng" => lng}, socket) do
     rounded_lat = if is_float(lat), do: Float.round(lat, 6), else: lat
     rounded_lng = if is_float(lng), do: Float.round(lng, 6), else: lng
     zoom = socket.assigns.zoom
 
-    {:reply, %{"data" => get_geo_jsons(lat, lng, zoom)},
+    {:ok, data} = Area.geo_json(lat, lng)
+
+    {:reply, %{"data" => data},
      socket
      |> assign(lat: lat, lng: lng)
      |> push_patch(to: "/@#{rounded_lat},#{rounded_lng},#{zoom}z")}
@@ -80,7 +65,7 @@ defmodule PetaPemiluWeb.Live.Index do
     rounded_lat = if is_float(lat), do: Float.round(lat, 6), else: lat
     rounded_lng = if is_float(lng), do: Float.round(lng, 6), else: lng
 
-    {:reply, %{"data" => get_geo_jsons(lat, lng, zoom)},
+    {:noreply,
      socket
      |> assign(zoom: zoom)
      |> push_patch(to: "/@#{rounded_lat},#{rounded_lng},#{zoom}z")}

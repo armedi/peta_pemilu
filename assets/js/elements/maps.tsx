@@ -42,10 +42,7 @@ function MapEvents(props: { center: Signal<LatLngExpression>; areas: Signal }) {
       const map = e.target as LeafletMap;
       getLiveViewHook(map.getContainer()).pushEvent(
         "zoom_map",
-        { zoom: map.getZoom() },
-        ({ data }) => {
-          props.areas.value = data;
-        }
+        { zoom: map.getZoom() }
       );
     },
   });
@@ -88,8 +85,8 @@ function Maps(props: Record<string, string>) {
         return (
           <GeoJSON
             style={{ weight: 0, color }}
-            key={area.kode_kd || area.kode_kec || area.kode_kk || area.kode_prov}
-            data={area.boundaries}
+            key={area.kode_dapil}
+            data={area.geojson}
           />
         );
       })}
