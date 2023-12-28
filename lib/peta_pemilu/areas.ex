@@ -16,16 +16,9 @@ defmodule PetaPemilu.Area do
               WHEN jenis_dapil = 'DPRD KABUPATEN/KOTA' THEN 3
             END AS o
           FROM
-            dapil_geojson
+            dapil
           WHERE
-            kode_dapil IN (
-              SELECT
-                kode_dapil
-              FROM
-                dapil
-              WHERE
-                st_intersects (geom, ST_SetSRID (ST_MakePoint ($1, $2), 104199))
-            )
+            st_intersects (geom, ST_SetSRID (ST_MakePoint ($1, $2), 104199))
           ORDER BY
             o
         );"

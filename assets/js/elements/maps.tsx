@@ -5,7 +5,7 @@ import { type LatLngExpression, type Map as LeafletMap } from "leaflet";
 import type { ViewHook } from "phoenix_live_view";
 import register from "preact-custom-element";
 import { useRef } from "preact/hooks";
-import { GeoJSON, MapContainer, TileLayer, useMapEvents } from "react-leaflet";
+import { GeoJSON, MapContainer, Popup, TileLayer, useMapEvents } from "react-leaflet";
 
 const tagName = "x-maps";
 
@@ -90,6 +90,7 @@ function Maps(props: Record<string, string>) {
           />
         );
       })}
+      {/* <Popup>Hello</Popup> */}
     </MapContainer>
   );
 }
