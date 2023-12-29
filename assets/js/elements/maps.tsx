@@ -5,7 +5,7 @@ import { type LatLngExpression, type Map as LeafletMap } from "leaflet";
 import type { ViewHook } from "phoenix_live_view";
 import register from "preact-custom-element";
 import { useRef } from "preact/hooks";
-import { GeoJSON, MapContainer, Popup, TileLayer, useMapEvents } from "react-leaflet";
+import { GeoJSON, MapContainer, TileLayer, useMapEvents } from "react-leaflet";
 
 const tagName = "x-maps";
 
@@ -40,10 +40,9 @@ function MapEvents(props: { center: Signal<LatLngExpression>; areas: Signal }) {
     },
     zoom(e) {
       const map = e.target as LeafletMap;
-      getLiveViewHook(map.getContainer()).pushEvent(
-        "zoom_map",
-        { zoom: map.getZoom() }
-      );
+      getLiveViewHook(map.getContainer()).pushEvent("zoom_map", {
+        zoom: map.getZoom(),
+      });
     },
   });
 
@@ -78,10 +77,9 @@ function Maps(props: Record<string, string>) {
           idx === 0
             ? "red"
             : idx === 1
-              ? "blue"
-              : idx === 2
-                ? "darkred"
-                : "yellow";
+              ? "green"
+              : "blue"
+
         return (
           <GeoJSON
             style={{ weight: 0, color }}
@@ -90,7 +88,6 @@ function Maps(props: Record<string, string>) {
           />
         );
       })}
-      {/* <Popup>Hello</Popup> */}
     </MapContainer>
   );
 }

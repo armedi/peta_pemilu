@@ -1,10 +1,11 @@
 defmodule PetaPemilu.Area do
-  def geo_json(lat, lng) do
+  def by_coordinate(lat, lng) do
     query = "
       SELECT
         kode_dapil,
         jenis_dapil,
         nama_dapil,
+        wilayah,
         geojson
       FROM
         (
