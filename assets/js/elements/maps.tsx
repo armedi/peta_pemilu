@@ -32,7 +32,7 @@ function MapEvents(props: { center: Signal<LatLngLiteral>; areas: Signal }) {
   useMapEvents({
     click(e) {
       getLiveViewHook(e.originalEvent.target as HTMLElement).pushEvent(
-        "set_map_view",
+        "map:click",
         e.latlng,
         ({ data }) => {
           props.areas.value = data;
@@ -41,7 +41,7 @@ function MapEvents(props: { center: Signal<LatLngLiteral>; areas: Signal }) {
     },
     zoom(e) {
       const map = e.target as LeafletMap;
-      getLiveViewHook(map.getContainer()).pushEvent("set_map_view", {
+      getLiveViewHook(map.getContainer()).pushEvent("map:zoom", {
         zoom: map.getZoom(),
       });
     },
@@ -78,19 +78,14 @@ function Maps(props: Record<string, string>) {
         });
       }
 
-      console.log(center.value, zoom.value)
-
       getLiveViewHook(element as HTMLElement).pushEvent(
-        "set_map_view",
+        "map:mounted",
         {
           lat: center.value.lat,
           lng: center.value.lng,
-          zoom: zoom.value,
         },
         (reply) => {
-          if (reply) {
-            areas.value = reply.data;
-          }
+          areas.value = reply.data;
         }
       );
     };

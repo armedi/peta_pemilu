@@ -42,21 +42,18 @@ defmodule PetaPemiluWeb.Live.Index do
     """
   end
 
-  defp parse_map_view(map_view) do
-    map_view
-    |> String.trim_leading("@")
-    |> String.trim_trailing("z")
-    |> String.split(",")
-    |> Enum.map(fn x -> Float.parse(x) |> elem(0) end)
-    |> (&Enum.zip([:lat, :lng, :zoom], &1)).()
-  end
-
   def mount(
         %{"map_view" => map_view_string},
         _session,
         socket
       ) do
-    map_view = parse_map_view(map_view_string)
+    map_view =
+      map_view_string
+      |> String.trim_leading("@")
+      |> String.trim_trailing("z")
+      |> String.split(",")
+      |> Enum.map(fn x -> Float.parse(x) |> elem(0) end)
+      |> (&Enum.zip([:lat, :lng, :zoom], &1)).()
 
     case map_view do
       [_, _, zoom: _zoom] -> {:ok, assign(socket, map_view)}
@@ -73,37 +70,41 @@ defmodule PetaPemiluWeb.Live.Index do
     {:noreply, socket}
   end
 
-  def handle_event("set_map_view", %{"lat" => lat, "lng" => lng, "zoom" => zoom}, socket) do
+  defp set_map_view(socket, %{"lat" => lat, "lng" => lng, "zoom" => zoom}) do
     rounded_lat = if is_float(lat), do: Float.round(lat, 6), else: lat
     rounded_lng = if is_float(lng), do: Float.round(lng, 6), else: lng
     zoom = zoom * 1.0
 
+    socket
+    |> assign(
+      lat: lat,
+      lng: lng,
+      zoom: zoom
+    )
+    |> push_patch(to: "/@#{rounded_lat},#{rounded_lng},#{zoom}z")
+  end
+
+  def handle_event("map:mounted", %{"lat" => lat, "lng" => lng}, socket) do
     {:ok, data} = Area.by_coordinate(lat, lng)
 
     {:reply, %{"data" => data},
      socket
-     |> assign(
-       lat: lat,
-       lng: lng,
-       zoom: zoom,
-       areas: Enum.map(data, &Map.drop(&1, ["geojson"]))
-     )
-     |> push_patch(to: "/@#{rounded_lat},#{rounded_lng},#{zoom}z")}
+     |> set_map_view(%{"lat" => lat, "lng" => lng, "zoom" => 10})
+     |> assign(areas: Enum.map(data, &Map.drop(&1, ["geojson"])))}
   end
 
-  def handle_event("set_map_view", %{"lat" => lat, "lng" => lng}, socket) do
-    handle_event(
-      "set_map_view",
-      %{"lat" => lat, "lng" => lng, "zoom" => socket.assigns.zoom},
-      socket
-    )
+  def handle_event("map:click", %{"lat" => lat, "lng" => lng}, socket) do
+    {:ok, data} = Area.by_coordinate(lat, lng)
+
+    {:reply, %{"data" => data},
+     socket
+     |> set_map_view(%{"lat" => lat, "lng" => lng, "zoom" => socket.assigns.zoom})
+     |> assign(areas: Enum.map(data, &Map.drop(&1, ["geojson"])))}
   end
 
-  def handle_event("set_map_view", %{"zoom" => zoom}, socket) do
-    handle_event(
-      "set_map_view",
-      %{"lat" => socket.assigns.lat, "lng" => socket.assigns.lng, "zoom" => zoom},
-      socket
-    )
+  def handle_event("map:zoom", %{"zoom" => zoom}, socket) do
+    {:noreply,
+     socket
+     |> set_map_view(%{"lat" => socket.assigns.lat, "lng" => socket.assigns.lng, "zoom" => zoom})}
   end
 end
