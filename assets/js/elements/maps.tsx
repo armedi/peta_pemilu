@@ -103,11 +103,25 @@ function Maps(props: Record<string, string>) {
         url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {areas.value.map((area, idx) => {
-        const color = idx === 0 ? "red" : idx === 1 ? "green" : "blue";
+        const [color, fillOpacity] =
+          idx === 0
+            ? ["hsl(50, 100%, 50%)", 0.4]
+            : idx === 1
+              ? [
+                "hsl(212, 82%, 50%)",
+                0.6,
+              ]
+              : ["hsl(120, 100%, 50%)", 0.25];
+
+        // #515151 pres wapres
+        // #b52b21 dpd
+        // #e6d256 dpr
+        // #1c5192 dprd prov
+        // #286036 dprd kabko
 
         return (
           <GeoJSON
-            style={{ weight: 0, color }}
+            style={{ weight: 0, color, fillOpacity }}
             key={area.kode_dapil}
             data={area.geojson}
           />

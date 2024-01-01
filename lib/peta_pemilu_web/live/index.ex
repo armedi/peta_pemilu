@@ -9,7 +9,7 @@ defmodule PetaPemiluWeb.Live.Index do
 
   defp dapil(assigns) do
     ~H"""
-    <div class="mb-6 [&:nth-child(1)]:text-[#ea5d49] [&:nth-child(2)]:text-[#aa8456] [&:nth-child(3)]:text-[#706486]">
+    <div class="mb-6 [&:nth-child(1)]:text-[#e6d256] [&:nth-child(2)]:text-[#1c5192] [&:nth-child(3)]:text-[#286036]">
       <div>DAPIL <%= @area["jenis_dapil"] %>: <strong><%= @area["nama_dapil"] %></strong></div>
       <ul class="list-inside list-disc">
         <%= for w <- @area["wilayah"] do %>
