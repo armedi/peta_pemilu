@@ -4,7 +4,7 @@ import Config
 config :peta_pemilu, PetaPemilu.Repo,
   username: "postgres",
   hostname: "localhost",
-  database: "batas_wilayah",
+  database: "peta_pemilu",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10

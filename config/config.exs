@@ -8,7 +8,7 @@
 import Config
 
 config :peta_pemilu, PetaPemilu.Repo,
-  database: "peta_pemilu_repo",
+  database: "peta_pemilu",
   username: "user",
   password: "pass",
   hostname: "localhost"
