@@ -1,4 +1,4 @@
-import "preact/debug";
+// import "preact/debug";
 
 import { useSignal, useSignalEffect, type Signal } from "@preact/signals";
 import { type LatLngLiteral, type Map as LeafletMap } from "leaflet";
