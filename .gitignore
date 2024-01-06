@@ -35,4 +35,6 @@ peta_pemilu-*.tar
 npm-debug.log
 /assets/node_modules/
 
-.env
+# Kamal deploy files
+/config/deploy.yml
+/.env
