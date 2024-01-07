@@ -8,31 +8,67 @@ defmodule PetaPemiluWeb.Live.Index do
   @default_lng 119.3
 
   defp dapil(assigns) do
+    assigns =
+      assign(assigns,
+        color:
+          case assigns.area["jenis_dapil"] do
+            "DPD RI" -> "#b52b21"
+            "DPR RI" -> "#e6d256"
+            "DPRD PROVINSI" -> "#1c5192"
+            "DPRD KABUPATEN/KOTA" -> "#286036"
+          end
+      )
+
     ~H"""
-    <div class="mb-6 [&:nth-child(1)]:text-[#e6d256] [&:nth-child(2)]:text-[#1c5192] [&:nth-child(3)]:text-[#286036]">
-      <div>DAPIL <%= @area["jenis_dapil"] %>: <strong><%= @area["nama_dapil"] %></strong></div>
-      <ul class="list-inside list-disc">
-        <%= for w <- @area["wilayah"] do %>
-          <li><%= w %></li>
-        <% end %>
-      </ul>
+    <div class="w-60 shrink-0 bg-white rounded-t opacity-90">
+      <div
+        class="p-4 text-white font-bold rounded-t"
+        style={"background-color: #{@color}" <> if @area["jenis_dapil"] == "DPR RI", do: ";color: unset", else: ""}
+      >
+        <%= @area["jenis_dapil"] %>
+      </div>
+      <div class="p-4 h-44 overflow-scroll">
+        <div class="font-bold mb-2">
+          DAPIL <%= @area["nama_dapil"] %>
+        </div>
+        <ul class="pl-4 list-outside list-disc">
+          <%= for w <- @area["wilayah"] do %>
+            <li><%= w %></li>
+          <% end %>
+        </ul>
+      </div>
     </div>
     """
   end
 
   def render(assigns) do
     ~H"""
-    <div class="flex isolate">
+    <div class="relative">
       <x-maps
         id="maps"
         phx-hook="x-maps"
         phx-update="ignore"
         center={Jason.encode!(%{"lat" => @lat, "lng" => @lng})}
         zoom={@zoom}
-        class="block grow h-screen relative after:content-[''] after:absolute after:top-0 after:right-0 after:w-16 after:h-full after:bg-gradient-to-r after:from-transparent after:to-white isolate after:z-[400]"
+        class="block grow h-[100vh] isolate"
       />
-      <div class="w-72 p-8">
-        <%= if Map.has_key?(assigns, :areas) do %>
+      <div class="w-full flex [&>:first-child]:ml-auto [&>:last-child]:mr-auto px-4 gap-4 overflow-scroll absolute bottom-0">
+        <%= if Map.has_key?(assigns, :areas) && length(assigns.areas) > 0 do %>
+          <% assigns =
+            assign(assigns,
+              areas: [
+                %{
+                  "jenis_dapil" => "DPD RI",
+                  "nama_dapil" =>
+                    hd(assigns.areas)["nama_dapil"]
+                    |> String.split()
+                    |> Enum.drop(-1)
+                    |> Enum.join(" "),
+                  "wilayah" => []
+                }
+                | assigns.areas
+              ]
+            ) %>
           <%= for area <- @areas do %>
             <.dapil area={area} />
           <% end %>
