@@ -1,0 +1,7 @@
+{
+  "tailwindCSS.experimental.configFile": "./assets/tailwind.config.js",
+  "tailwindCSS.includeLanguages": {
+    "elixir": "html",
+    "phoenix-heex": "html"
+  }
+}
