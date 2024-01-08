@@ -64,9 +64,13 @@ defmodule PetaPemiluWeb.Live.Index do
     """
   end
 
-  def mount(
+  def mount(_params, _session, socket) do
+    {:ok, socket}
+  end
+
+  def handle_params(
         %{"map_view" => map_view_string},
-        _session,
+        _uri,
         socket
       ) do
     map_view =
@@ -75,21 +79,29 @@ defmodule PetaPemiluWeb.Live.Index do
       |> String.trim_trailing("z")
       |> String.split(",")
       |> Enum.map(fn x -> Float.parse(x) |> elem(0) end)
-      |> (&Enum.zip([:lat, :lng, :zoom], &1)).()
 
-    case map_view do
-      [_, _, zoom: _zoom] -> {:ok, assign(socket, map_view)}
-      [_, _] -> {:ok, assign(socket, map_view ++ [zoom: @default_zoom])}
-      _ -> {:ok, assign(socket, lat: @default_lat, lng: @default_lng, zoom: @default_zoom)}
-    end
+    [lat, lng, zoom] =
+      case map_view do
+        [_, _, _] -> map_view
+        [lat, lng] -> [lat, lng, @default_zoom]
+        _ -> [@default_lat, @default_lng, @default_zoom]
+      end
+
+    {:noreply,
+     assign(socket,
+       lat: lat,
+       lng: lng,
+       zoom: zoom
+     )}
   end
 
-  def mount(_params, _session, socket) do
-    {:ok, assign(socket, lat: @default_lat, lng: @default_lng, zoom: @default_zoom)}
-  end
-
-  def handle_params(_unsigned_params, _uri, socket) do
-    {:noreply, socket}
+  def handle_params(_unsigned_params, _ui, socket) do
+    {:noreply,
+     assign(socket,
+       lat: @default_lat,
+       lng: @default_lng,
+       zoom: @default_zoom
+     )}
   end
 
   defp set_map_view(socket, %{"lat" => lat, "lng" => lng, "zoom" => zoom}) do
@@ -98,11 +110,6 @@ defmodule PetaPemiluWeb.Live.Index do
     zoom = zoom * 1.0
 
     socket
-    |> assign(
-      lat: lat,
-      lng: lng,
-      zoom: zoom
-    )
     |> push_patch(to: "/@#{rounded_lat},#{rounded_lng},#{zoom}z")
   end
 
