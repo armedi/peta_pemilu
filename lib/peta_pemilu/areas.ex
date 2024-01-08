@@ -26,10 +26,28 @@ defmodule PetaPemilu.Area do
 
     case PetaPemilu.Repo.query(query, [lng, lat]) do
       {:ok, result} ->
-        data =
-          Enum.map(result.rows, &(Enum.zip(result.columns, &1) |> Enum.into(%{})))
+        if length(result.rows) === 0 do
+          {:ok, []}
+        else
+          data =
+            [
+              %{
+                "kode_dapil" => result.rows |> hd |> Enum.at(0) |> String.slice(0..1),
+                "jenis_dapil" => "DPD RI",
+                "nama_dapil" =>
+                  result.rows
+                  |> hd
+                  |> Enum.at(2)
+                  |> String.split()
+                  |> Enum.drop(-1)
+                  |> Enum.join(" "),
+                "wilayah" => []
+              }
+              | Enum.map(result.rows, &(Enum.zip(result.columns, &1) |> Enum.into(%{})))
+            ]
 
-        {:ok, data}
+          {:ok, data}
+        end
 
       res ->
         res

@@ -103,15 +103,18 @@ function Maps(props: Record<string, string>) {
         url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {areas.value.map((area, idx) => {
-        const [color, fillOpacity] =
-          idx === 0
-            ? ["hsl(50, 100%, 50%)", 0.4]
-            : idx === 1
-              ? [
-                "hsl(212, 82%, 50%)",
-                0.6,
-              ]
-              : ["hsl(120, 100%, 50%)", 0.25];
+        const [color, fillOpacity] = (() => {
+          switch (area.jenis_dapil) {
+            case "DPR RI":
+              return ["hsl(50, 100%, 50%)", 0.4];
+            case "DPRD PROVINSI":
+              return ["hsl(212, 82%, 50%)", 0.6];
+            case "DPRD KABUPATEN/KOTA":
+              return ["hsl(120, 100%, 50%)", 0.25];
+            default:
+              return ["transparent", 0];
+          }
+        })()
 
         // #515151 pres wapres
         // #b52b21 dpd
