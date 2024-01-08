@@ -48,7 +48,8 @@ defmodule PetaPemiluWeb.Live.Index do
         id="maps"
         phx-hook="x-maps"
         phx-update="ignore"
-        center={Jason.encode!(%{"lat" => @lat, "lng" => @lng})}
+        lat={@lat}
+        lng={@lng}
         zoom={@zoom}
         class="block grow h-[100vh] isolate"
       />

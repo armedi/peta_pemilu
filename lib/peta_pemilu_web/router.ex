@@ -25,6 +25,8 @@ defmodule PetaPemiluWeb.Router do
     get "/calon/dprd-prov/:id", CandidateController, :dprd_prov
     get "/calon/dprd-kabko/:id", CandidateController, :dprd_kabko
 
+    live "/calon/dpd", Live
+
     live "/:map_view", Live.Index
   end
 

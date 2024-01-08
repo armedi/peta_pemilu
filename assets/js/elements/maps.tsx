@@ -53,8 +53,8 @@ function MapEvents(props: { center: Signal<LatLngLiteral>; areas: Signal }) {
 function Maps(props: Record<string, string>) {
   const mapRef = useRef<LeafletMap>(null);
 
-  const center = useSignal<LatLngLiteral>(JSON.parse(props.center));
-  const zoom = useSignal<number>(JSON.parse(props.zoom));
+  const center = useSignal<LatLngLiteral>({ lat: Number(props.lat), lng: Number(props.lng) });
+  const zoom = useSignal<number>(Number(props.zoom));
   const areas = useSignal<any[]>([]);
 
   useSignalEffect(() => {
