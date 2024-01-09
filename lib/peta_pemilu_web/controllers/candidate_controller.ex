@@ -1,36 +1,43 @@
 defmodule PetaPemiluWeb.CandidateController do
   use PetaPemiluWeb, :controller
-  alias PetaPemilu.Candidate
 
   def dpd(conn, %{"id" => id}) do
-    {:ok, response} = Candidate.fetch_candidate_profile("dpd", id)
-
     conn
-    |> put_resp_content_type("text/html")
-    |> send_resp(response.status, response.body)
+    |> put_root_layout(html: false)
+    |> put_layout(html: false)
+    |> render(:show,
+      url: "https://infopemilu.kpu.go.id/Pemilu/Dct_dpd/profil",
+      data: [{"ID_CANDIDATE", id}, {"pilihan_publikasi", "BERSEDIA"}]
+    )
   end
 
   def dpr(conn, %{"id" => id}) do
-    {:ok, response} = Candidate.fetch_candidate_profile("dpr", id)
-
     conn
-    |> put_resp_content_type("text/html")
-    |> send_resp(response.status, response.body)
+    |> put_root_layout(html: false)
+    |> put_layout(html: false)
+    |> render(:show,
+      url: "https://infopemilu.kpu.go.id/Pemilu/Dct_dpr/profile",
+      data: [{"id_calon_dpr", id}, {"status_publikasi", "Bersedia"}]
+    )
   end
 
   def dprd_prov(conn, %{"id" => id}) do
-    {:ok, response} = Candidate.fetch_candidate_profile("dprd-prov", id)
-
     conn
-    |> put_resp_content_type("text/html")
-    |> send_resp(response.status, response.body)
+    |> put_root_layout(html: false)
+    |> put_layout(html: false)
+    |> render(:show,
+      url: "https://infopemilu.kpu.go.id/Pemilu/Dct_dprprov/profile",
+      data: [{"id_calon_dpr", id}, {"status_publikasi", "Bersedia"}]
+    )
   end
 
   def dprd_kabko(conn, %{"id" => id}) do
-    {:ok, response} = Candidate.fetch_candidate_profile("dprd-kabko", id)
-
     conn
-    |> put_resp_content_type("text/html")
-    |> send_resp(response.status, response.body)
+    |> put_root_layout(html: false)
+    |> put_layout(html: false)
+    |> render(:show,
+      url: "https://infopemilu.kpu.go.id/Pemilu/Dct_dprd/profile",
+      data: [{"id_calon_dpr", id}, {"status_publikasi", "Bersedia"}]
+    )
   end
 end
