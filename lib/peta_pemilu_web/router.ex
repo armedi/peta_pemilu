@@ -19,13 +19,10 @@ defmodule PetaPemiluWeb.Router do
 
     live "/", Live.Index
 
-    get "/calon", CandidateController, :index
-    get "/calon/dpd/:id", CandidateController, :dpd
-    get "/calon/dpr/:id", CandidateController, :dpr
-    get "/calon/dprd-prov/:id", CandidateController, :dprd_prov
-    get "/calon/dprd-kabko/:id", CandidateController, :dprd_kabko
-
-    live "/calon/dpd", Live
+    get "/caleg/dpd/:slug/:id", CandidateController, :dpd
+    get "/caleg/dpr/:slug/:id", CandidateController, :dpr
+    get "/caleg/dprd-prov/:slug/:id", CandidateController, :dprd_prov
+    get "/caleg/dprd-kabko/:slug/:id", CandidateController, :dprd_kabko
 
     live "/:map_view", Live.Index
   end

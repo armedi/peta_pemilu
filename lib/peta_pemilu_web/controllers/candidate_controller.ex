@@ -2,10 +2,6 @@ defmodule PetaPemiluWeb.CandidateController do
   use PetaPemiluWeb, :controller
   alias PetaPemilu.Candidate
 
-  def index(conn, _params) do
-    redirect(conn, to: ~p"/")
-  end
-
   def dpd(conn, %{"id" => id}) do
     {:ok, response} = Candidate.fetch_candidate_profile("dpd", id)
 
