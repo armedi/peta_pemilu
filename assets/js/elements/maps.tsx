@@ -20,7 +20,9 @@ export const phxHooks = {
   [tagName]: {
     mounted(this: ViewHook) {
       liveViewHooks.set(this.el, this);
-      this.el.dispatchEvent(new Event("mounted"));
+      requestIdleCallback(() => {
+        this.el.dispatchEvent(new Event("mounted"));
+      })
     },
     destroyed(this: ViewHook) {
       liveViewHooks.delete(this.el);

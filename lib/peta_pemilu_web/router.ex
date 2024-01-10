@@ -17,19 +17,20 @@ defmodule PetaPemiluWeb.Router do
   scope "/", PetaPemiluWeb do
     pipe_through :browser
 
-    live "/", Live.Index
-
     get "/caleg/dpd/:slug/:id", CandidateController, :dpd
-    get "/caleg/dpr/:slug/:id", CandidateController, :dpr
-    get "/caleg/dprd-prov/:slug/:id", CandidateController, :dprd_prov
-    get "/caleg/dprd-kabko/:slug/:id", CandidateController, :dprd_kabko
+    live "/caleg/dpd/:slug", Live.Dpd
 
-    live "/caleg/dpd/:slug", Live.Index
-    live "/caleg/dpr/:slug", Live.Index
-    live "/caleg/dprd-prov/:slug", Live.Index
-    live "/caleg/dprd-kabko/:slug", Live.Index
+    get "/caleg/dpr/:slug/:id", CandidateController, :dpr
+    live "/caleg/dpr/:slug", Live.Dpr
+
+    get "/caleg/dprd-prov/:slug/:id", CandidateController, :dprd_prov
+    live "/caleg/dprd-prov/:slug", Live.DprdProv
+
+    get "/caleg/dprd-kabko/:slug/:id", CandidateController, :dprd_kabko
+    live "/caleg/dprd-kabko/:slug", Live.DprdKabko
 
     live "/:map_view", Live.Index
+    live "/", Live.Index
   end
 
   # Other scopes may use custom stacks.
