@@ -5,6 +5,7 @@ defmodule PetaPemilu.Area do
         kode_dapil,
         jenis_dapil,
         nama_dapil,
+        nama_dapil_slug,
         wilayah,
         geojson
       FROM
@@ -29,18 +30,24 @@ defmodule PetaPemilu.Area do
         if length(result.rows) === 0 do
           {:ok, []}
         else
+          nama_dapil =
+            result.rows
+            |> hd
+            |> Enum.at(2)
+            |> String.split()
+            |> Enum.drop(-1)
+            |> Enum.join(" ")
+
           data =
             [
               %{
                 "kode_dapil" => result.rows |> hd |> Enum.at(0) |> String.slice(0..1),
                 "jenis_dapil" => "DPD RI",
-                "nama_dapil" =>
-                  result.rows
-                  |> hd
-                  |> Enum.at(2)
-                  |> String.split()
-                  |> Enum.drop(-1)
-                  |> Enum.join(" "),
+                "nama_dapil" => nama_dapil,
+                "nama_dapil_slug" =>
+                  nama_dapil
+                  |> String.downcase()
+                  |> String.replace(" ", "-"),
                 "wilayah" => []
               }
               | Enum.map(result.rows, &(Enum.zip(result.columns, &1) |> Enum.into(%{})))

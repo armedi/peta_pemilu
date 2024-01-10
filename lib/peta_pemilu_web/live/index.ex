@@ -24,10 +24,10 @@ defmodule PetaPemiluWeb.Live.Index do
       <.link
         patch={
           case assigns.area["jenis_dapil"] do
-            "DPD RI" -> ~p"/caleg/dpd/#{assigns.area["nama_dapil"]}"
-            "DPR RI" -> ~p"/caleg/dpr/#{assigns.area["nama_dapil"]}"
-            "DPRD PROVINSI" -> ~p"/caleg/dprd-prov/#{assigns.area["nama_dapil"]}"
-            "DPRD KABUPATEN/KOTA" -> ~p"/caleg/dprd-kabko/#{assigns.area["nama_dapil"]}"
+            "DPD RI" -> ~p"/caleg/dpd/#{assigns.area["nama_dapil_slug"]}"
+            "DPR RI" -> ~p"/caleg/dpr/#{assigns.area["nama_dapil_slug"]}"
+            "DPRD PROVINSI" -> ~p"/caleg/dprd-prov/#{assigns.area["nama_dapil_slug"]}"
+            "DPRD KABUPATEN/KOTA" -> ~p"/caleg/dprd-kabko/#{assigns.area["nama_dapil_slug"]}"
           end
         }
         class="block p-4 text-white font-bold rounded-t cursor-pointer"
