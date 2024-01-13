@@ -11,7 +11,7 @@ defmodule PetaPemiluWeb.Live.Index do
     assigns =
       assign(assigns,
         color:
-          case assigns.area["jenis_dapil"] do
+          case assigns.area.jenis_dapil do
             "DPD RI" -> "#b52b21"
             "DPR RI" -> "#e6d256"
             "DPRD PROVINSI" -> "#1c5192"
@@ -23,24 +23,24 @@ defmodule PetaPemiluWeb.Live.Index do
     <div class="w-60 shrink-0 bg-white rounded-t opacity-90">
       <.link
         patch={
-          case assigns.area["jenis_dapil"] do
-            "DPD RI" -> ~p"/caleg/dpd/#{assigns.area["nama_dapil_slug"]}"
-            "DPR RI" -> ~p"/caleg/dpr/#{assigns.area["nama_dapil_slug"]}"
-            "DPRD PROVINSI" -> ~p"/caleg/dprd-prov/#{assigns.area["nama_dapil_slug"]}"
-            "DPRD KABUPATEN/KOTA" -> ~p"/caleg/dprd-kabko/#{assigns.area["nama_dapil_slug"]}"
+          case assigns.area.jenis_dapil do
+            "DPD RI" -> ~p"/caleg/dpd/#{assigns.area.nama_dapil_slug}"
+            "DPR RI" -> ~p"/caleg/dpr/#{assigns.area.nama_dapil_slug}"
+            "DPRD PROVINSI" -> ~p"/caleg/dprd-prov/#{assigns.area.nama_dapil_slug}"
+            "DPRD KABUPATEN/KOTA" -> ~p"/caleg/dprd-kabko/#{assigns.area.nama_dapil_slug}"
           end
         }
         class="block p-4 text-white font-bold rounded-t cursor-pointer"
-        style={"background-color: #{@color}" <> if @area["jenis_dapil"] == "DPR RI", do: ";color: unset", else: ""}
+        style={"background-color: #{@color}" <> if @area.jenis_dapil == "DPR RI", do: ";color: unset", else: ""}
       >
-        <%= @area["jenis_dapil"] %>
+        <%= @area.jenis_dapil %>
       </.link>
       <div class="p-4 h-44 overflow-scroll">
         <div class="font-bold mb-2">
-          DAPIL <%= @area["nama_dapil"] %>
+          DAPIL <%= @area.nama_dapil %>
         </div>
         <ul class="pl-4 list-outside list-disc">
-          <%= for w <- @area["wilayah"] do %>
+          <%= for w <- @area.wilayah do %>
             <li><%= w %></li>
           <% end %>
         </ul>
@@ -122,21 +122,21 @@ defmodule PetaPemiluWeb.Live.Index do
   end
 
   def handle_event("map:mounted", %{"lat" => lat, "lng" => lng}, socket) do
-    {:ok, data} = Area.by_coordinate(lat, lng)
+    data = Area.by_coordinate(lat, lng)
 
     {:reply, %{"data" => data},
      socket
      |> set_map_view(%{"lat" => lat, "lng" => lng, "zoom" => 10})
-     |> assign(areas: Enum.map(data, &Map.drop(&1, ["geojson"])))}
+     |> assign(areas: Enum.map(data, &Map.drop(&1, [:geojson])))}
   end
 
   def handle_event("map:click", %{"lat" => lat, "lng" => lng}, socket) do
-    {:ok, data} = Area.by_coordinate(lat, lng)
+    data = Area.by_coordinate(lat, lng)
 
     {:reply, %{"data" => data},
      socket
      |> set_map_view(%{"lat" => lat, "lng" => lng, "zoom" => socket.assigns.zoom})
-     |> assign(areas: Enum.map(data, &Map.drop(&1, ["geojson"])))}
+     |> assign(areas: Enum.map(data, &Map.drop(&1, [:geojson])))}
   end
 
   def handle_event("map:zoom", %{"zoom" => zoom}, socket) do
