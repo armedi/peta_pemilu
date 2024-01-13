@@ -5,12 +5,16 @@ defmodule PetaPemiluWeb.Live.Dpr do
   def render(assigns) do
     ~H"""
     <div>
-      Caleg DPR
+      <pre>
+      <%= Jason.encode!(assigns.candidates, pretty: true) %>
+      </pre>
     </div>
     """
   end
 
-  def mount(_params, _session, socket) do
-    {:ok, socket}
+  def mount(%{"slug" => slug}, _session, socket) do
+    candidates = PetaPemilu.Candidate.caleg_by_dapil(:dpr, slug)
+
+    {:ok, assign(socket, :candidates, candidates)}
   end
 end
