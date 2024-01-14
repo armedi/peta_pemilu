@@ -24,7 +24,7 @@ defmodule PetaPemiluWeb.Live.DprdKabko do
         <%= for party <- @parties do %>
           <div
             style={"background-image: url('#{party.foto_partai}')"}
-            class="h-[378px] w-80 bg-center bg-cover bg-no-repeat border border-gray-500"
+            class="h-[452px] w-80 bg-center bg-cover bg-no-repeat border border-gray-500"
           >
             <div class="h-full bg-[rgba(255,255,255,0.975)]">
               <h3 class="font-bold text-lg uppercase px-6 h-20 flex items-center gap-4 leading-5">
