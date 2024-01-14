@@ -27,10 +27,13 @@ defmodule PetaPemiluWeb.Live.Dpd do
             <img
               src={candidate.foto}
               loading="lazy"
+              fetchpriority="low"
               alt={candidate.nama}
               class="w-32 h-40 object-cover object-top"
             />
-            <div style="text-wrap: balance" class="text-xs flex-1 flex justify-center items-center"><%= candidate.nama %></div>
+            <div style="text-wrap: balance" class="text-xs flex-1 flex justify-center items-center">
+              <%= candidate.nama %>
+            </div>
           </div>
         <% end %>
       </div>

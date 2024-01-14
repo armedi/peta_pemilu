@@ -20,7 +20,7 @@ defmodule PetaPemiluWeb.Live.Dpr do
         <span class="block">Daerah Pemilihan</span>
         <span class="block"><%= @dapil %></span>
       </h2>
-      <div class="flex flex-wrap justify-center gap-8 mx-auto">
+      <div class="flex flex-wrap justify-center gap-8 px-8 mx-auto">
         <%= for party <- @parties do %>
           <div
             style={"background-image: url('#{party.foto_partai}')"}
