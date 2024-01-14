@@ -59,7 +59,7 @@ defmodule PetaPemiluWeb.Live.Index do
         lat={@lat}
         lng={@lng}
         zoom={@zoom}
-        class="block grow h-[100vh] isolate"
+        class="block grow h-[100dvh] isolate"
       />
       <div class="w-full flex [&>:first-child]:ml-auto [&>:last-child]:mr-auto px-4 gap-4 overflow-scroll absolute bottom-0">
         <%= if Map.has_key?(assigns, :areas) && length(assigns.areas) > 0 do %>
