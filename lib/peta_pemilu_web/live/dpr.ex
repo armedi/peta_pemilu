@@ -20,13 +20,26 @@ defmodule PetaPemiluWeb.Live.Dpr do
         <span class="block">Daerah Pemilihan</span>
         <span class="block"><%= @dapil %></span>
       </h2>
-      <div class="flex flex-wrap justify-center gap-12 mx-auto max-w-6xl">
-        <%= for candidate <- @candidates do %>
-          <div class="h-80 w-60 border border-black">
-            <%!-- <%= Jason.encode!(candidate, pretty: true) %> --%>
+      <div class="flex flex-wrap justify-center gap-8 mx-auto">
+        <%= for party <- @parties do %>
+          <div
+            style={"background-image: url('#{party.foto_partai}')"}
+            class="h-[452px] w-80 bg-center bg-cover bg-no-repeat border border-gray-500"
+          >
+            <div class="h-full bg-[rgba(255,255,255,0.975)]">
+              <h3 class="font-bold text-lg uppercase px-6 h-20 flex items-center gap-4 leading-5">
+                <span class="block text-4xl w-10 text-center"><%= party.nomor_urut_partai %></span>
+                <span class="block"><%= party.partai %></span>
+              </h3>
+              <ol class="[counter-reset:listCounter]">
+                <%= for c <- party.caleg do %>
+                  <li class="text-sm py-2 px-4 [&:first-child]:border-t border-b border-gray-500 border-spacing-0 whitespace-nowrap [counter-increment:listCounter] truncate relative before:content-[counter(listCounter)] before:text-right before:inline-block before:w-4 before:mr-4 after:content-['.'] after:absolute after:left-8">
+                    <%= c["nama"] %>
+                  </li>
+                <% end %>
+              </ol>
+            </div>
           </div>
-          <%!-- <pre>
-        </pre> --%>
         <% end %>
       </div>
     </div>
@@ -35,8 +48,8 @@ defmodule PetaPemiluWeb.Live.Dpr do
 
   def mount(%{"slug" => slug}, _session, socket) do
     dapil = String.split(slug, "-") |> Enum.join(" ")
-    candidates = PetaPemilu.Candidate.caleg_by_dapil(:dpr, slug)
+    parties = PetaPemilu.Candidate.caleg_by_dapil(:dpr, slug)
 
-    {:ok, assign(socket, candidates: candidates, dapil: dapil)}
+    {:ok, assign(socket, dapil: dapil, parties: parties)}
   end
 end
