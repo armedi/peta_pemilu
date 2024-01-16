@@ -22,7 +22,20 @@ defmodule PetaPemiluWeb.Live.Dpd do
       </h2>
       <div class="flex flex-wrap justify-center gap-4 mx-auto max-w-6xl">
         <%= for candidate <- @candidates do %>
-          <div class="h-64 w-32 overflow-clip border flex flex-col border-gray-500 text-center">
+          <.dynamic_tag
+            name={if candidate.id_calon, do: "a", else: "div"}
+            href={
+              if candidate.id_calon,
+                do: ~p"/caleg/dpd/#{assigns.dapil_slug}/#{candidate.id_calon}",
+                else: nil
+            }
+            target={
+              if candidate.id_calon,
+                do: "_blank",
+                else: nil
+            }
+            class={"h-64 w-32 overflow-clip border flex flex-col border-gray-500 text-center #{if !candidate.id_calon, do: "text-gray-400", else: ""}"}
+          >
             <div class="p-1 font-bold text-lg"><%= candidate.nomor_urut %></div>
             <img
               src={candidate.foto}
@@ -34,7 +47,7 @@ defmodule PetaPemiluWeb.Live.Dpd do
             <div style="text-wrap: balance" class="text-xs flex-1 flex justify-center items-center">
               <%= candidate.nama %>
             </div>
-          </div>
+          </.dynamic_tag>
         <% end %>
       </div>
     </div>
