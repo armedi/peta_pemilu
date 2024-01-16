@@ -9,7 +9,10 @@ defmodule PetaPemiluWeb.Live.Dpd do
         style={"background-image: url(#{static_path(@socket, "/images/wave.svg")})"}
         class="bg-left-bottom bg-[length:auto_2rem] bg-repeat-x pb-8 mb-12 text-center"
       >
-        <h1 class="bg-red-500 pt-6 px-8 text-white uppercase font-bold text-xl">
+        <h1
+          class="bg-red-500 pt-6 px-8 text-white uppercase font-bold text-xl"
+          style="text-wrap: balance;"
+        >
           <span class="block">Surat Suara Pemilihan Umum</span>
           <span class="block">Anggota Dewan Perwakilan Daerah</span>
           <span class="block">Republik Indonesia</span>

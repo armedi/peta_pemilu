@@ -9,7 +9,10 @@ defmodule PetaPemiluWeb.Live.DprdKabko do
         style={"background-image: url(#{static_path(@socket, "/images/wave.svg")})"}
         class="bg-left-bottom bg-[length:auto_2rem] bg-repeat-x pb-8 mb-12 text-center"
       >
-        <h1 class="bg-red-500 pt-6 px-8 text-white uppercase font-bold text-xl">
+        <h1
+          class="bg-red-500 pt-6 px-8 text-white uppercase font-bold text-xl"
+          style="text-wrap: balance;"
+        >
           <span class="block">Surat Suara Pemilihan Umum</span>
           <span class="block">Anggota Dewan Perwakilan Rakyat</span>
           <span class="block">Daerah Kabupaten/Kota</span>
@@ -23,7 +26,7 @@ defmodule PetaPemiluWeb.Live.DprdKabko do
       <div class="flex flex-wrap justify-center gap-8 px-8 mx-auto">
         <%= for party <- @parties do %>
           <div
-            style={"background-image: url('#{party.foto_partai}')"}
+            style={"background-image: url('#{party.foto_partai}'); height: #{82 + (@rows * 37)}px"}
             class="h-[452px] w-80 bg-center bg-cover bg-no-repeat border border-gray-500"
           >
             <div class="h-full bg-[rgba(255,255,255,0.975)]">
@@ -62,6 +65,13 @@ defmodule PetaPemiluWeb.Live.DprdKabko do
     dapil = String.split(slug, "-") |> Enum.join(" ")
     parties = PetaPemilu.Candidate.caleg_by_dapil(:dprd_kabko, slug)
 
-    {:ok, assign(socket, dapil_slug: slug, dapil: dapil, parties: parties)}
+    rows =
+      parties
+      |> Enum.max_by(&length(Map.get(&1, :caleg)))
+      |> Map.get(:caleg)
+      |> length()
+      |> (&Enum.max([&1, 10])).()
+
+    {:ok, assign(socket, dapil_slug: slug, dapil: dapil, parties: parties, rows: rows)}
   end
 end
