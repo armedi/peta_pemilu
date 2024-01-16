@@ -33,8 +33,20 @@ defmodule PetaPemiluWeb.Live.Dpr do
               </h3>
               <ol class="[counter-reset:listCounter]">
                 <%= for c <- party.caleg do %>
-                  <li class="text-sm py-2 px-4 [&:first-child]:border-t border-b border-gray-500 border-spacing-0 whitespace-nowrap [counter-increment:listCounter] truncate relative before:content-[counter(listCounter)] before:text-right before:inline-block before:w-4 before:mr-4 after:content-['.'] after:absolute after:left-8">
-                    <%= c["nama"] %>
+                  <li class="[&:first-child]:border-t border-b border-gray-500 border-spacing-0 [counter-increment:listCounter] relative">
+                    <%= if c["id"] do %>
+                      <a
+                        href={~p"/caleg/dpr/#{assigns.dapil_slug}/#{c["id"]}"}
+                        target="_blank"
+                        class="block w-full text-sm py-2 px-4 whitespace-nowrap truncate before:content-[counter(listCounter)] before:text-right before:inline-block before:w-4 before:mr-4 after:content-['.'] after:absolute after:left-8"
+                      >
+                        <%= c["nama"] %>
+                      </a>
+                    <% else %>
+                      <span class="block w-full text-sm py-2 px-4 whitespace-nowrap truncate before:content-[counter(listCounter)] before:text-right before:inline-block before:w-4 before:mr-4 after:content-['.'] after:absolute after:left-8">
+                        <%= c["nama"] %>
+                      </span>
+                    <% end %>
                   </li>
                 <% end %>
               </ol>
@@ -50,6 +62,6 @@ defmodule PetaPemiluWeb.Live.Dpr do
     dapil = String.split(slug, "-") |> Enum.join(" ")
     parties = PetaPemilu.Candidate.caleg_by_dapil(:dpr, slug)
 
-    {:ok, assign(socket, dapil: dapil, parties: parties)}
+    {:ok, assign(socket, dapil_slug: slug, dapil: dapil, parties: parties)}
   end
 end

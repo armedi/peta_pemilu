@@ -13,7 +13,7 @@ defmodule PetaPemilu.Candidate do
           nama: c.nama,
           id_calon: c.id_calon_dpd
         },
-        order_by: [c.nomor_urut]
+        order_by: [c.kode_provinsi, c.nomor_urut]
 
     PetaPemilu.Repo.all(query)
   end

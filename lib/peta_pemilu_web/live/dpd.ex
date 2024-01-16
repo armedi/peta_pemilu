@@ -45,6 +45,6 @@ defmodule PetaPemiluWeb.Live.Dpd do
     dapil = String.split(slug, "-") |> Enum.join(" ")
     candidates = PetaPemilu.Candidate.caleg_by_dapil(:dpd, slug)
 
-    {:ok, assign(socket, candidates: candidates, dapil: dapil)}
+    {:ok, assign(socket, dapil_slug: slug, dapil: dapil, candidates: candidates)}
   end
 end
