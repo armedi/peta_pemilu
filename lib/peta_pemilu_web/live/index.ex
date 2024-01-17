@@ -20,31 +20,32 @@ defmodule PetaPemiluWeb.Live.Index do
       )
 
     ~H"""
-    <div class="w-60 shrink-0 bg-white rounded-t opacity-90">
-      <.link
-        patch={
-          case assigns.area.jenis_dapil do
-            "DPD RI" -> ~p"/caleg/dpd/#{assigns.area.nama_dapil_slug}"
-            "DPR RI" -> ~p"/caleg/dpr/#{assigns.area.nama_dapil_slug}"
-            "DPRD PROVINSI" -> ~p"/caleg/dprd-prov/#{assigns.area.nama_dapil_slug}"
-            "DPRD KABUPATEN/KOTA" -> ~p"/caleg/dprd-kabko/#{assigns.area.nama_dapil_slug}"
-          end
-        }
-        class="block p-4 text-white font-bold rounded-t cursor-pointer"
-        style={"background-color: #{@color}" <> if @area.jenis_dapil == "DPR RI", do: ";color: unset", else: ""}
-      >
-        <%= @area.jenis_dapil %>
-      </.link>
-      <div class="p-4 h-44 overflow-scroll">
-        <div class="font-bold mb-2">
-          DAPIL <%= @area.nama_dapil %>
+    <div class="w-64 shrink-0 isolate">
+      <.link patch={
+        case assigns.area.jenis_dapil do
+          "DPD RI" -> ~p"/caleg/dpd/#{assigns.area.nama_dapil_slug}"
+          "DPR RI" -> ~p"/caleg/dpr/#{assigns.area.nama_dapil_slug}"
+          "DPRD PROVINSI" -> ~p"/caleg/dprd-prov/#{assigns.area.nama_dapil_slug}"
+          "DPRD KABUPATEN/KOTA" -> ~p"/caleg/dprd-kabko/#{assigns.area.nama_dapil_slug}"
+        end
+      }>
+        <div
+          class="block p-4 text-white font-bold rounded-full text-center cursor-pointer relative top-2 w-60 mx-auto z-10 hover:brightness-90 border-b-4 border-l-2"
+          style={"background-color: #{@color}; border-color: hsl(from #{@color} h s calc(l - 0.1));" <> if @area.jenis_dapil == "DPR RI", do: "color: unset;", else: ""}
+        >
+          <%= @area.jenis_dapil %>
         </div>
-        <ul class="pl-4 list-outside list-disc">
-          <%= for w <- @area.wilayah do %>
-            <li><%= w %></li>
-          <% end %>
-        </ul>
-      </div>
+        <div class="p-4 pt-6 h-44 overflow-scroll rounded-t-lg bg-white opacity-90">
+          <div class="font-bold mb-2">
+            DAPIL <%= @area.nama_dapil %>
+          </div>
+          <ul class="pl-4 list-outside list-disc">
+            <%= for w <- @area.wilayah do %>
+              <li><%= w %></li>
+            <% end %>
+          </ul>
+        </div>
+      </.link>
     </div>
     """
   end
@@ -61,7 +62,7 @@ defmodule PetaPemiluWeb.Live.Index do
         zoom={@zoom}
         class="block grow h-[100dvh] isolate"
       />
-      <div class="w-full flex [&>:first-child]:ml-auto [&>:last-child]:mr-auto px-4 gap-4 overflow-scroll absolute bottom-0">
+      <div class="w-full flex [&>:first-child]:ml-auto [&>:last-child]:mr-auto px-4 gap-2 overflow-scroll absolute bottom-0">
         <%= if Map.has_key?(assigns, :areas) && length(assigns.areas) > 0 do %>
           <%= for area <- @areas do %>
             <.dapil area={area} />
