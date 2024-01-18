@@ -20,7 +20,7 @@ defmodule PetaPemiluWeb.Live.Index do
       )
 
     ~H"""
-    <div class="w-64 shrink-0 isolate">
+    <div class="w-60 shrink-0 isolate">
       <.link patch={
         case assigns.area.jenis_dapil do
           "DPD RI" -> ~p"/caleg/dpd/#{assigns.area.nama_dapil_slug}"
@@ -30,12 +30,12 @@ defmodule PetaPemiluWeb.Live.Index do
         end
       }>
         <div
-          class="block p-4 text-white font-bold rounded-full text-center cursor-pointer relative top-2 w-60 mx-auto z-10 hover:brightness-90 border-b-4 border-l-2"
+          class="block py-3 px-2 text-white font-bold rounded-full text-center cursor-pointer relative top-1 w-60 mx-auto z-10 hover:brightness-90 border-b-4 border-l-2"
           style={"background-color: #{@color}; border-color: hsl(from #{@color} h s calc(l - 0.1));" <> if @area.jenis_dapil == "DPR RI", do: "color: unset;", else: ""}
         >
           <%= @area.jenis_dapil %>
         </div>
-        <div class="p-4 pt-6 h-44 overflow-scroll rounded-t-lg bg-white opacity-90">
+        <div class="pt-5 pb-4 px-6 h-44 overflow-scroll rounded-t-lg bg-white opacity-90">
           <div class="font-bold mb-2">
             DAPIL <%= @area.nama_dapil %>
           </div>
@@ -62,7 +62,7 @@ defmodule PetaPemiluWeb.Live.Index do
         zoom={@zoom}
         class="block grow h-[100dvh] isolate"
       />
-      <div class="w-full flex [&>:first-child]:ml-auto [&>:last-child]:mr-auto px-4 gap-2 overflow-scroll absolute bottom-0">
+      <div class="w-full flex [&>:first-child]:ml-auto [&>:last-child]:mr-auto px-4 gap-3 overflow-scroll absolute bottom-0">
         <%= if Map.has_key?(assigns, :areas) && length(assigns.areas) > 0 do %>
           <%= for area <- @areas do %>
             <.dapil area={area} />
