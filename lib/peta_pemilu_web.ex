@@ -83,9 +83,8 @@ defmodule PetaPemiluWeb do
     quote do
       # HTML escaping functionality
       import Phoenix.HTML
-      # Core UI components and translation
+      # Core UI components
       import PetaPemiluWeb.CoreComponents
-      import PetaPemiluWeb.Gettext
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS
