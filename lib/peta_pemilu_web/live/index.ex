@@ -62,7 +62,7 @@ defmodule PetaPemiluWeb.Live.Index do
         zoom={@zoom}
         class="block grow h-[100dvh] isolate"
       />
-      <div class="w-full flex [&>:first-child]:ml-auto [&>:last-child]:mr-auto px-4 gap-3 overflow-scroll absolute bottom-0">
+      <div class="w-full flex [&>:first-child]:ml-auto [&>:last-child]:mr-auto px-4 gap-3 overflow-scroll absolute bottom-0 pointer-events-none [&>*]:pointer-events-auto">
         <%= if Map.has_key?(assigns, :areas) && length(assigns.areas) > 0 do %>
           <%= for area <- @areas do %>
             <.dapil area={area} />
