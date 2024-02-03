@@ -6,13 +6,10 @@ defmodule PetaPemiluWeb.Live.Dpr do
     ~H"""
     <div class="pb-8">
       <div
-        style={"background-image: url(#{static_path(@socket, "/images/wave.svg")})"}
+        style={"background-image: url(#{static_path(@socket, "/images/wave-dpr-ri.svg")})"}
         class="bg-left-bottom bg-[length:auto_2rem] bg-repeat-x pb-8 mb-12 text-center"
       >
-        <h1
-          class="bg-red-500 pt-6 px-8 text-white uppercase font-bold text-xl"
-          style="text-wrap: balance;"
-        >
+        <h1 class="bg-[#e6d256] pt-6 px-8 uppercase font-bold text-xl" style="text-wrap: balance;">
           <span class="block">Surat Suara Pemilihan Umum</span>
           <span class="block">Anggota Dewan Perwakilan Rakyat</span>
           <span class="block">Republik Indonesia</span>

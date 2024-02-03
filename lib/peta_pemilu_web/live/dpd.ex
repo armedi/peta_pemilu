@@ -6,11 +6,11 @@ defmodule PetaPemiluWeb.Live.Dpd do
     ~H"""
     <div class="pb-8">
       <div
-        style={"background-image: url(#{static_path(@socket, "/images/wave.svg")})"}
+        style={"background-image: url(#{static_path(@socket, "/images/wave-dpd.svg")})"}
         class="bg-left-bottom bg-[length:auto_2rem] bg-repeat-x pb-8 mb-12 text-center"
       >
         <h1
-          class="bg-red-500 pt-6 px-8 text-white uppercase font-bold text-xl"
+          class="bg-[#b52b21] pt-6 px-8 text-white uppercase font-bold text-xl"
           style="text-wrap: balance;"
         >
           <span class="block">Surat Suara Pemilihan Umum</span>
