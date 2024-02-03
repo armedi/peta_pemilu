@@ -5,27 +5,73 @@ defmodule PetaPemiluWeb.BallotComponents do
   attr :jenis_dapil, :atom, required: true
   attr :background_image, :string, required: true
 
-  def page_header(assigns) do
+  def page_header(assigns = %{jenis_dapil: :dpd}) do
     ~H"""
     <div
       style={"background-image: #{assigns.background_image}"}
       class="bg-left-bottom bg-[length:auto_2rem] bg-repeat-x pb-8 mb-12 text-center"
     >
       <h1
-        class={[
-          case assigns.jenis_dapil do
-            :dpd -> "bg-[#b52b21] text-white"
-            :dpr -> "bg-[#e6d256]"
-            :dprd_prov -> "bg-[#1c5192] text-white"
-            :dprd_kabko -> "bg-[#286036] text-white"
-          end,
-          "pt-6 px-8 uppercase font-bold text-xl"
-        ]}
+        class="bg-[#b52b21] text-white pt-6 px-8 uppercase font-bold text-xl"
+        style="text-wrap: balance;"
+      >
+        <span class="block">Surat Suara Pemilihan Umum</span>
+        <span class="block">Anggota Dewan Perwakilan Daerah</span>
+        <span class="block">Republik Indonesia</span>
+        <span class="block">Tahun 2024</span>
+      </h1>
+    </div>
+    """
+  end
+
+  def page_header(assigns = %{jenis_dapil: :dpr}) do
+    ~H"""
+    <div
+      style={"background-image: #{assigns.background_image}"}
+      class="bg-left-bottom bg-[length:auto_2rem] bg-repeat-x pb-8 mb-12 text-center"
+    >
+      <h1 class="bg-[#e6d256] pt-6 px-8 uppercase font-bold text-xl" style="text-wrap: balance;">
+        <span class="block">Surat Suara Pemilihan Umum</span>
+        <span class="block">Anggota Dewan Perwakilan Rakyat</span>
+        <span class="block">Republik Indonesia</span>
+        <span class="block">Tahun 2024</span>
+      </h1>
+    </div>
+    """
+  end
+
+  def page_header(assigns = %{jenis_dapil: :dprd_prov}) do
+    ~H"""
+    <div
+      style={"background-image: #{assigns.background_image}"}
+      class="bg-left-bottom bg-[length:auto_2rem] bg-repeat-x pb-8 mb-12 text-center"
+    >
+      <h1
+        class="bg-[#1c5192] text-white pt-6 px-8 uppercase font-bold text-xl"
         style="text-wrap: balance;"
       >
         <span class="block">Surat Suara Pemilihan Umum</span>
         <span class="block">Anggota Dewan Perwakilan Rakyat</span>
-        <span class="block">Republik Indonesia</span>
+        <span class="block">Daerah Provinsi</span>
+        <span class="block">Tahun 2024</span>
+      </h1>
+    </div>
+    """
+  end
+
+  def page_header(assigns = %{jenis_dapil: :dprd_kabko}) do
+    ~H"""
+    <div
+      style={"background-image: #{assigns.background_image}"}
+      class="bg-left-bottom bg-[length:auto_2rem] bg-repeat-x pb-8 mb-12 text-center"
+    >
+      <h1
+        class="bg-[#286036] text-white pt-6 px-8 uppercase font-bold text-xl"
+        style="text-wrap: balance;"
+      >
+        <span class="block">Surat Suara Pemilihan Umum</span>
+        <span class="block">Anggota Dewan Perwakilan Rakyat</span>
+        <span class="block">Daerah Kabupaten/Kota</span>
         <span class="block">Tahun 2024</span>
       </h1>
     </div>
@@ -76,7 +122,7 @@ defmodule PetaPemiluWeb.BallotComponents do
                   <%= if c["id"] do %>
                     <a
                       href={
-                        "/caleg/#{case assigns.jenis_dapil do
+                        ~p"/caleg/#{case assigns.jenis_dapil do
                           :dpr -> "dpr"
                           :dprd_prov -> "dprd-prov"
                           :dprd_kabko -> "dprd-kabko"
