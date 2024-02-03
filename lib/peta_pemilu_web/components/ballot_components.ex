@@ -89,6 +89,38 @@ defmodule PetaPemiluWeb.BallotComponents do
     """
   end
 
+  attr :jenis_dapil, :atom
+
+  def profile_tips(assigns) do
+    ~H"""
+    <div class={
+      [
+        if Map.has_key?(assigns, :jenis_dapil) && assigns.jenis_dapil == :dpd do
+          # Enum.with_index(272..1152//144, fn val, idx ->
+          #   "min-[#{val}px]:w-[calc(8rem*#{idx + 2}+#{idx + 1}rem)]"
+          # end)
+          # |> Enum.join(" ")
+          "min-[272px]:w-[calc(8rem*2+1rem)] min-[416px]:w-[calc(8rem*3+2rem)] min-[560px]:w-[calc(8rem*4+3rem)] min-[704px]:w-[calc(8rem*5+4rem)] min-[848px]:w-[calc(8rem*6+5rem)] min-[992px]:w-[calc(8rem*7+6rem)] min-[1136px]:w-[calc(8rem*8+7rem)]"
+        else
+          # Enum.with_index(384..2144//352, fn val, idx ->
+          #   "min-[#{val}px]:w-[calc(20rem*#{idx + 1}+2rem*#{idx})]"
+          # end)
+          # |> Enum.join(" ")
+          "w-[20rem] min-[384px]:w-[calc(20rem*1+2rem*0)] min-[736px]:w-[calc(20rem*2+2rem*1)] min-[1088px]:w-[calc(20rem*3+2rem*2)] min-[1440px]:w-[calc(20rem*4+2rem*3)] min-[1792px]:w-[calc(20rem*5+2rem*4)] min-[2144px]:w-[calc(20rem*6+2rem*5)]"
+        end,
+        "mx-auto mb-8 text-sm text-gray-500"
+      ]
+    }>
+      <strong>Tips:</strong>
+      Klik nama calon untuk melihat profilnya. Atau kunjungi <a
+        href="https://pilihcaleg.vercel.app"
+        target="_blank"
+        class="underline"
+      >pilihcaleg.vercel.app</a>.
+    </div>
+    """
+  end
+
   attr :jenis_dapil, :atom, required: true
   attr :dapil_slug, :string, required: true, doc: "the slug of the dapil"
   attr :parties, :list, required: true, doc: "the list of parties with their candidates"

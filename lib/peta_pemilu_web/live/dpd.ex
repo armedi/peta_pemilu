@@ -11,6 +11,7 @@ defmodule PetaPemiluWeb.Live.Dpd do
         background_image={"url(#{static_path(@socket, "/images/wave-dpd.svg")})"}
       />
       <.page_subheader dapil={@dapil} />
+      <.profile_tips jenis_dapil={:dpd} />
       <div class="flex flex-wrap justify-center gap-4 mx-auto max-w-6xl">
         <%= for candidate <- @candidates do %>
           <.dynamic_tag

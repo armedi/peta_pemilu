@@ -11,6 +11,7 @@ defmodule PetaPemiluWeb.Live.DprdProv do
         background_image={"url(#{static_path(@socket, "/images/wave-dprd-prov.svg")})"}
       />
       <.page_subheader dapil={@dapil} />
+      <.profile_tips />
       <.parties_candidates jenis_dapil={:dprd_prov} dapil_slug={@dapil_slug} parties={@parties} />>
     </div>
     """

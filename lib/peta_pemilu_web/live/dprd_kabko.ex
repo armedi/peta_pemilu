@@ -11,6 +11,7 @@ defmodule PetaPemiluWeb.Live.DprdKabko do
         background_image={"url(#{static_path(@socket, "/images/wave-dprd-kabko.svg")})"}
       />
       <.page_subheader dapil={@dapil} />
+      <.profile_tips />
       <.parties_candidates jenis_dapil={:dprd_kabko} dapil_slug={@dapil_slug} parties={@parties} />
     </div>
     """
