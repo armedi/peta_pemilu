@@ -17,10 +17,10 @@ defmodule PetaPemiluWeb.Live.DprdProv do
     """
   end
 
-  def mount(%{"slug" => slug}, _session, socket) do
-    dapil = String.split(slug, "-") |> Enum.join(" ")
-    parties = PetaPemilu.Candidate.caleg_by_dapil(:dprd_prov, slug)
+  def mount(%{"dapil" => dapil_slug}, _session, socket) do
+    dapil = String.split(dapil_slug, "-") |> Enum.join(" ")
+    parties = PetaPemilu.Candidate.by_dapil(:dprd_prov, dapil_slug)
 
-    {:ok, assign(socket, dapil_slug: slug, dapil: dapil, parties: parties)}
+    {:ok, assign(socket, dapil_slug: dapil_slug, dapil: dapil, parties: parties)}
   end
 end

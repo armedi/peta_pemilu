@@ -46,10 +46,10 @@ defmodule PetaPemiluWeb.Live.Dpd do
     """
   end
 
-  def mount(%{"slug" => slug}, _session, socket) do
-    dapil = String.split(slug, "-") |> Enum.join(" ")
-    candidates = PetaPemilu.Candidate.caleg_by_dapil(:dpd, slug)
+  def mount(%{"dapil" => dapil_slug}, _session, socket) do
+    dapil = String.split(dapil_slug, "-") |> Enum.join(" ")
+    candidates = PetaPemilu.Candidate.by_dapil(:dpd, dapil_slug)
 
-    {:ok, assign(socket, dapil_slug: slug, dapil: dapil, candidates: candidates)}
+    {:ok, assign(socket, dapil_slug: dapil_slug, dapil: dapil, candidates: candidates)}
   end
 end

@@ -17,17 +17,21 @@ defmodule PetaPemiluWeb.Router do
   scope "/", PetaPemiluWeb do
     pipe_through :browser
 
-    get "/caleg/dpd/:slug/:id", CandidateController, :dpd
-    live "/caleg/dpd/:slug", Live.Dpd
+    get "/caleg/dpd/:dapil/:candidate_number", CandidateController, :dpd
+    # get "/caleg/dpd/:dapil/:id", CandidateController, :dpd
+    live "/caleg/dpd/:dapil", Live.Dpd
 
-    get "/caleg/dpr/:slug/:id", CandidateController, :dpr
-    live "/caleg/dpr/:slug", Live.Dpr
+    get "/caleg/dpr/:dapil/:party/:candidate_number", CandidateController, :dpr
+    # get "/caleg/dpr/:dapil/:id", CandidateController, :dpr
+    live "/caleg/dpr/:dapil", Live.Dpr
 
-    get "/caleg/dprd-prov/:slug/:id", CandidateController, :dprd_prov
-    live "/caleg/dprd-prov/:slug", Live.DprdProv
+    get "/caleg/dprd-prov/:dapil/:party/:candidate_number", CandidateController, :dprd_prov
+    # get "/caleg/dprd-prov/:dapil/:id", CandidateController, :dprd_prov
+    live "/caleg/dprd-prov/:dapil", Live.DprdProv
 
-    get "/caleg/dprd-kabko/:slug/:id", CandidateController, :dprd_kabko
-    live "/caleg/dprd-kabko/:slug", Live.DprdKabko
+    get "/caleg/dprd-kabko/:dapil/:party/:candidate_number", CandidateController, :dprd_kabko
+    # get "/caleg/dprd-kabko/:dapil/:id", CandidateController, :dprd_kabko
+    live "/caleg/dprd-kabko/:dapil", Live.DprdKabko
 
     live "/:map_view", Live.Index
     live "/", Live.Index

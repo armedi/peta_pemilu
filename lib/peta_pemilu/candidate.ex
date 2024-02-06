@@ -1,7 +1,7 @@
 defmodule PetaPemilu.Candidate do
   import Ecto.Query
 
-  def caleg_by_dapil(:dpd, dapil_slug) do
+  def by_dapil(:dpd, dapil_slug) do
     query =
       from prov in "provinsi",
         join: c in "caleg_dpd",
@@ -18,7 +18,7 @@ defmodule PetaPemilu.Candidate do
     PetaPemilu.Repo.all(query)
   end
 
-  def caleg_by_dapil(:dpr, dapil_slug) do
+  def by_dapil(:dpr, dapil_slug) do
     query =
       from c in subquery(
              from d in "dapil",
@@ -57,7 +57,7 @@ defmodule PetaPemilu.Candidate do
     PetaPemilu.Repo.all(query)
   end
 
-  def caleg_by_dapil(:dprd_prov, dapil_slug) do
+  def by_dapil(:dprd_prov, dapil_slug) do
     query =
       from c in subquery(
              from d in "dapil",
@@ -96,7 +96,7 @@ defmodule PetaPemilu.Candidate do
     PetaPemilu.Repo.all(query)
   end
 
-  def caleg_by_dapil(:dprd_kabko, dapil_slug) do
+  def by_dapil(:dprd_kabko, dapil_slug) do
     query =
       from c in subquery(
              from d in "dapil",
@@ -135,34 +135,185 @@ defmodule PetaPemilu.Candidate do
     PetaPemilu.Repo.all(query)
   end
 
-  def fetch_candidate_profile(kind, id) do
-    multipart =
-      case kind do
-        "dpd" ->
-          Multipart.new()
-          |> Multipart.add_part(Multipart.Part.text_field("ID_CANDIDATE", id))
-          |> Multipart.add_part(Multipart.Part.text_field("pilihan_publikasi", "BERSEDIA"))
+  def profile(:dpd, %{dapil: dapil, candidate_number: candidate_number}) do
+    caleg =
+      PetaPemilu.Repo.one(
+        from c in "caleg_dpd",
+          left_join: p in "provinsi",
+          on: c.kode_provinsi == p.kode_prov,
+          where:
+            p.provinsi_slug == ^dapil and
+              c.nomor_urut == ^candidate_number,
+          select: [:id, :profile]
+      )
 
-        _ ->
-          Multipart.new()
-          |> Multipart.add_part(Multipart.Part.text_field("id_calon_dpr", id))
-          |> Multipart.add_part(Multipart.Part.text_field("status_publikasi", "Bersedia"))
-      end
+    case caleg do
+      nil ->
+        {:error, "Not found"}
 
-    url =
-      case kind do
-        "dpd" -> "https://infopemilu.kpu.go.id/Pemilu/Dct_dpd/profil"
-        "dpr" -> "https://infopemilu.kpu.go.id/Pemilu/Dct_dpr/profile"
-        "dprd-prov" -> "https://infopemilu.kpu.go.id/Pemilu/Dct_dprprov/profile"
-        "dprd-kabko" -> "https://infopemilu.kpu.go.id/Pemilu/Dct_dprd/profile"
-      end
+      _ ->
+        case caleg.profile do
+          nil ->
+            case Req.get(
+                   base_url: "https://caleg.zakiego.com/api",
+                   url: "/dpd/calon/:dapil/:candidate_number",
+                   path_params: [dapil: dapil, candidate_number: candidate_number]
+                 ) do
+              {:ok, response} ->
+                data = response.body["data"]
 
-    Req.post(url,
-      headers: [
-        {"Content-Type", Multipart.content_type(multipart, "multipart/form-data")},
-        {"Content-Length", Multipart.content_length(multipart)}
-      ],
-      body: Multipart.body_stream(multipart)
-    )
+                PetaPemilu.Repo.update_all(
+                  from("caleg_dpd", where: [id: ^caleg.id], update: [set: [profile: ^data]]),
+                  []
+                )
+
+                {:ok, data}
+
+              result ->
+                result
+            end
+
+          profile ->
+            {:ok, profile}
+        end
+    end
+  end
+
+  def profile(:dpr, %{dapil: dapil, party: party, candidate_number: candidate_number}) do
+    caleg =
+      PetaPemilu.Repo.one(
+        from c in "caleg_dpr",
+          left_join: d in "dapil",
+          on: c.kode_dapil == d.kode_dapil,
+          left_join: p in "partai",
+          on: c.id_partai == p.id,
+          where:
+            d.nama_dapil_slug == ^dapil and p.slug == ^party and
+              c.nomor_urut == ^candidate_number,
+          select: [:id, :profile]
+      )
+
+    case caleg do
+      nil ->
+        {:error, "Not found"}
+
+      _ ->
+        case caleg.profile do
+          nil ->
+            case Req.get(
+                   base_url: "https://caleg.zakiego.com/api",
+                   url: "/dpr-ri/calon/:dapil/:party/:candidate_number",
+                   path_params: [
+                     dapil: dapil,
+                     party: party,
+                     candidate_number: candidate_number
+                   ]
+                 ) do
+              {:ok, response} ->
+                data = response.body["data"]
+
+                PetaPemilu.Repo.update_all(
+                  from("caleg_dpr", where: [id: ^caleg.id], update: [set: [profile: ^data]]),
+                  []
+                )
+
+                {:ok, data}
+
+              result ->
+                result
+            end
+
+          profile ->
+            {:ok, profile}
+        end
+    end
+  end
+
+  def profile(:dprd_prov, %{dapil: dapil, party: party, candidate_number: candidate_number}) do
+    caleg =
+      PetaPemilu.Repo.one(
+        from c in "caleg_dprd_prov",
+          left_join: d in "dapil",
+          on: c.kode_dapil == d.kode_dapil,
+          left_join: p in "partai",
+          on: c.id_partai == p.id,
+          where:
+            d.nama_dapil_slug == ^dapil and p.slug == ^party and
+              c.nomor_urut == ^candidate_number,
+          select: [:id, :profile]
+      )
+
+    case caleg.profile do
+      nil ->
+        case Req.get(
+               base_url: "https://caleg.zakiego.com/api",
+               url: "/dprd-provinsi/calon/:dapil/:party/:candidate_number",
+               path_params: [
+                 dapil: dapil,
+                 party: party,
+                 candidate_number: candidate_number
+               ]
+             ) do
+          {:ok, response} ->
+            data = response.body["data"]
+
+            PetaPemilu.Repo.update_all(
+              from("caleg_dprd_prov", where: [id: ^caleg.id], update: [set: [profile: ^data]]),
+              []
+            )
+
+            {:ok, data}
+
+          result ->
+            result
+        end
+
+      profile ->
+        {:ok, profile}
+    end
+  end
+
+  def profile(:dprd_kabko, %{dapil: dapil, party: party, candidate_number: candidate_number}) do
+    caleg =
+      PetaPemilu.Repo.one(
+        from c in "caleg_dprd_kabko",
+          left_join: d in "dapil",
+          on: c.kode_dapil == d.kode_dapil,
+          left_join: p in "partai",
+          on: c.id_partai == p.id,
+          where:
+            d.nama_dapil_slug == ^dapil and p.slug == ^party and
+              c.nomor_urut == ^candidate_number,
+          select: [:id, :profile]
+      )
+
+    case caleg.profile do
+      nil ->
+        case Req.get(
+               base_url: "https://caleg.zakiego.com/api",
+               url: "/dprd-kabupaten-kota/calon/:dapil/:party/:candidate_number",
+               path_params: [
+                 dapil: dapil,
+                 party: party,
+                 candidate_number: candidate_number
+               ]
+             ) do
+          {:ok, response} ->
+            data = response.body["data"]
+
+            PetaPemilu.Repo.update_all(
+              from("caleg_dprd_kabko", where: [id: ^caleg.id], update: [set: [profile: ^data]]),
+              []
+            )
+
+            {:ok, data}
+
+          result ->
+            result
+        end
+
+      profile ->
+        {:ok, profile}
+    end
   end
 end
