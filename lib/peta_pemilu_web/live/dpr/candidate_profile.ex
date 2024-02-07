@@ -13,7 +13,7 @@ defmodule PetaPemiluWeb.Live.Dpr.CandidateProfile do
         _session,
         socket
       ) do
-    candidate =
+    {:ok, candidate} =
       PetaPemilu.Candidate.profile(:dpr, %{
         dapil: dapil_slug,
         party: party,

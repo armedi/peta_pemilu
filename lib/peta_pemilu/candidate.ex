@@ -210,7 +210,7 @@ defmodule PetaPemilu.Candidate do
                    ]
                  ) do
               {:ok, response} ->
-                data = response.body["data"]
+                [data | _tail] = response.body["data"]
 
                 PetaPemilu.Repo.update_all(
                   from("caleg_dpr", where: [id: ^caleg.id], update: [set: [profile: ^data]]),
