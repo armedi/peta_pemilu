@@ -1,7 +1,6 @@
 defmodule PetaPemiluWeb.Live.DprdProv do
   use PetaPemiluWeb, :live_view
   import PetaPemiluWeb.BallotComponents
-  require Jason
 
   def render(assigns) do
     ~H"""
