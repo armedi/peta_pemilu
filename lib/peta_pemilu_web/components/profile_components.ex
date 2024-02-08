@@ -1,39 +1,29 @@
 defmodule PetaPemiluWeb.ProfileComponents do
   use Phoenix.Component
 
-  def candidate_profile(assigns = %{jenis_dapil: :dpr}) do
-    dpr_dprd_profile(assigns)
-  end
-
-  def candidate_profile(assigns = %{jenis_dapil: :dprd_prov}) do
-    dpr_dprd_profile(assigns)
-  end
-
-  def candidate_profile(assigns = %{jenis_dapil: :dprd_kabko}) do
-    dpr_dprd_profile(assigns)
-  end
-
-  defp dpr_dprd_profile(assigns) do
+  def candidate_profile(assigns) do
     ~H"""
     <main class="max-w-screen-md mx-auto p-8">
-      <div class="flex flex-col-reverse sm:flex-row mb-12 relative">
+      <div class="flex flex-col-reverse sm:flex-row mb-12 relative drop-shadow">
         <div class="flex-1 flex flex-col justify-end relative">
           <h1 class="inline-flex min-w-0 items-end font-bold">
             <span class="inline-flex justify-center items-center h-24 w-16 text-4xl bg-gray-600 text-white rounded-l">
               <%= @candidate["nomorUrut"] %>
             </span>
-            <span class="flex-1 inline-flex items-center px-6 py-4 border border-gray-400 text-2xl">
+            <span class="flex-1 inline-flex items-center -ml-[2px] px-6 py-4 border-2 sm:border-r-0 border-gray-600 text-2xl">
               <%= @candidate["nama"] %>
             </span>
           </h1>
         </div>
 
         <div class="mx-auto mb-4 sm:mb-0 relative">
-          <img
-            src={"https://infopemilu.kpu.go.id/#{@candidate["logoPartai"]}"}
-            alt={@candidate["namaPartai"]}
-            class="h-8 sm:h-16 w-8 sm:w-16 object-contain absolute top-1 sm:top-0 right-1 sm:right-36"
-          />
+          <%= unless is_nil(@candidate["logoPartai"]) do %>
+            <img
+              src={"https://infopemilu.kpu.go.id/#{@candidate["logoPartai"]}"}
+              alt={@candidate["namaPartai"]}
+              class="h-8 sm:h-16 w-8 sm:w-16 object-contain absolute top-1 sm:top-0 right-1 sm:right-36"
+            />
+          <% end %>
 
           <img
             src={@candidate["pasFoto"]}
@@ -42,6 +32,19 @@ defmodule PetaPemiluWeb.ProfileComponents do
           />
         </div>
       </div>
+
+      <%= unless is_nil(@candidate["motivasi"]) do %>
+        <div class="mb-12">
+          <h3 class="text-lg font-semibold mb-2">Motivasi</h3>
+          <ul>
+            <%= for motivation <- @candidate["motivasi"] do %>
+              <li class="whitespace-pre-line">
+                <%= motivation %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
 
       <%= unless is_nil(@candidate["programUsulan"]) do %>
         <div class="mb-12">

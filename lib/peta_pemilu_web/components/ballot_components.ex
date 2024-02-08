@@ -111,12 +111,7 @@ defmodule PetaPemiluWeb.BallotComponents do
         "mx-auto mb-8 text-sm text-gray-500"
       ]
     }>
-      <strong>Tips:</strong>
-      Klik nama calon untuk melihat profilnya. Atau kunjungi <a
-        href="https://pilihcaleg.vercel.app"
-        target="_blank"
-        class="underline"
-      >pilihcaleg.vercel.app</a>.
+      <strong>Tips:</strong> Klik nama calon untuk melihat profilnya.
     </div>
     """
   end

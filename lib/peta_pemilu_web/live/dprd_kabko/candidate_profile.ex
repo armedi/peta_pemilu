@@ -4,7 +4,7 @@ defmodule PetaPemiluWeb.Live.DprdKabko.CandidateProfile do
 
   def render(assigns) do
     ~H"""
-    <.candidate_profile jenis_dapil={:dprd_kabko} {assigns} />
+    <.candidate_profile {assigns} />
     """
   end
 

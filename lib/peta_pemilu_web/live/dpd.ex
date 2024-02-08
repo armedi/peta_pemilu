@@ -16,14 +16,8 @@ defmodule PetaPemiluWeb.Live.Dpd do
           <%= if candidate.id_calon do %>
             <a
               href={
-                if candidate.id_calon,
-                  do: ~p"/caleg/dpd/#{assigns.dapil_slug}/#{candidate.id_calon}",
-                  else: nil
-              }
-              target={
-                if candidate.id_calon,
-                  do: "_blank",
-                  else: nil
+                # ~p"/caleg/dpd/#{assigns.dapil_slug}/#{candidate.id_calon}"
+                ~p"/caleg/dpd/#{assigns.dapil_slug}/#{candidate.nomor_urut}"
               }
               class="h-64 w-32 overflow-clip border flex flex-col border-gray-500 text-center"
             >

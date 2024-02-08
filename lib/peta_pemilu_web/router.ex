@@ -17,8 +17,8 @@ defmodule PetaPemiluWeb.Router do
   scope "/", PetaPemiluWeb do
     pipe_through :browser
 
-    # get "/caleg/dpd/:dapil/:candidate_number", CandidateController, :dpd
-    get "/caleg/dpd/:dapil/:id", CandidateController, :dpd
+    live "/caleg/dpd/:dapil/:candidate_number", Live.Dpd.CandidateProfile
+    # get "/caleg/dpd/:dapil/:id", CandidateController, :dpd
     live "/caleg/dpd/:dapil", Live.Dpd
 
     live "/caleg/dpr/:dapil/:party/:candidate_number", Live.Dpr.CandidateProfile

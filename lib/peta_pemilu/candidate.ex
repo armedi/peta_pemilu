@@ -150,7 +150,7 @@ defmodule PetaPemilu.Candidate do
           where:
             p.provinsi_slug == ^dapil and
               c.nomor_urut == ^candidate_number,
-          select: [:id, :profile]
+          select: [:id, :foto, :profile]
       )
 
     case caleg do
@@ -166,21 +166,21 @@ defmodule PetaPemilu.Candidate do
                    path_params: [dapil: dapil, candidate_number: candidate_number]
                  ) do
               {:ok, response} ->
-                data = response.body["data"]
+                [data | _tail] = response.body["data"]
 
                 PetaPemilu.Repo.update_all(
                   from("caleg_dpd", where: [id: ^caleg.id], update: [set: [profile: ^data]]),
                   []
                 )
 
-                {:ok, data}
+                {:ok, %{data | "pasFoto" => caleg.foto}}
 
               result ->
                 result
             end
 
           profile ->
-            {:ok, profile}
+            {:ok, %{profile | "pasFoto" => caleg.foto}}
         end
     end
   end

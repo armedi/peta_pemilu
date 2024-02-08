@@ -1,4 +1,4 @@
-defmodule PetaPemiluWeb.Live.DprdProv.CandidateProfile do
+defmodule PetaPemiluWeb.Live.Dpd.CandidateProfile do
   use PetaPemiluWeb, :live_view
   import PetaPemiluWeb.ProfileComponents
 
@@ -9,14 +9,13 @@ defmodule PetaPemiluWeb.Live.DprdProv.CandidateProfile do
   end
 
   def mount(
-        %{"dapil" => dapil_slug, "party" => party, "candidate_number" => candidate_number},
+        %{"dapil" => dapil_slug, "candidate_number" => candidate_number},
         _session,
         socket
       ) do
     {:ok, candidate} =
-      PetaPemilu.Candidate.profile(:dprd_prov, %{
+      PetaPemilu.Candidate.profile(:dpd, %{
         dapil: dapil_slug,
-        party: party,
         candidate_number: String.to_integer(candidate_number)
       })
 
