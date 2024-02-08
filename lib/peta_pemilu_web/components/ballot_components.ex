@@ -151,11 +151,11 @@ defmodule PetaPemiluWeb.BallotComponents do
                 <%= if c["id"] do %>
                   <a
                     href={
-                      ~p"/caleg/#{case assigns.jenis_dapil do
+                      "/caleg/#{case assigns.jenis_dapil do
                         :dpr -> "dpr"
                         :dprd_prov -> "dprd-prov"
                         :dprd_kabko -> "dprd-kabko"
-                      end}/#{assigns.dapil_slug}/#{c["id"]}"
+                      end}/#{assigns.dapil_slug}/#{URI.encode_www_form(c["id"])}"
                     }
                     target="_blank"
                     class="block w-full py-2 px-4 whitespace-nowrap truncate before:content-[counter(listCounter)] before:text-right before:inline-block before:w-4 before:mr-4 after:content-['.'] after:absolute after:left-8"

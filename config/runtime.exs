@@ -28,7 +28,7 @@ if config_env() == :prod do
       For example: ecto://USER:PASS@HOST/DATABASE
       """
 
-  %URI{host: database_host} = URI.parse(database_url)
+  # %URI{host: database_host} = URI.parse(database_url)
 
   maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
 

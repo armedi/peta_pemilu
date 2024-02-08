@@ -13,34 +13,45 @@ defmodule PetaPemiluWeb.Live.Dpd do
       <.profile_tips jenis_dapil={:dpd} />
       <div class="flex flex-wrap justify-center gap-4 mx-auto max-w-6xl">
         <%= for candidate <- @candidates do %>
-          <.dynamic_tag
-            name={if candidate.id_calon, do: "a", else: "div"}
-            href={
-              if candidate.id_calon,
-                do: ~p"/caleg/dpd/#{assigns.dapil_slug}/#{candidate.id_calon}",
-                else: nil
-            }
-            target={
-              if candidate.id_calon,
-                do: "_blank",
-                else: nil
-            }
-            class={"h-64 w-32 overflow-clip border flex flex-col border-gray-500 text-center #{if !candidate.id_calon, do: "text-gray-400", else: ""}"}
-          >
-            <div class="p-1 font-bold text-lg"><%= candidate.nomor_urut %></div>
-            <img
-              src={candidate.foto}
-              loading="lazy"
-              fetchpriority="low"
-              alt={candidate.nama}
-              class="w-32 h-40 object-cover object-top"
-            />
-            <div style="text-wrap: balance" class="text-xs flex-1 flex justify-center items-center">
-              <%= candidate.nama %>
+          <%= if candidate.id_calon do %>
+            <a
+              href={
+                if candidate.id_calon,
+                  do: ~p"/caleg/dpd/#{assigns.dapil_slug}/#{candidate.id_calon}",
+                  else: nil
+              }
+              target={
+                if candidate.id_calon,
+                  do: "_blank",
+                  else: nil
+              }
+              class="h-64 w-32 overflow-clip border flex flex-col border-gray-500 text-center"
+            >
+              <.candidate_card_inner candidate={candidate} />
+            </a>
+          <% else %>
+            <div class="h-64 w-32 overflow-clip border flex flex-col border-gray-500 text-center text-gray-400">
+              <.candidate_card_inner candidate={candidate} />
             </div>
-          </.dynamic_tag>
+          <% end %>
         <% end %>
       </div>
+    </div>
+    """
+  end
+
+  defp candidate_card_inner(assigns) do
+    ~H"""
+    <div class="p-1 font-bold text-lg"><%= @candidate.nomor_urut %></div>
+    <img
+      src={@candidate.foto}
+      loading="lazy"
+      fetchpriority="low"
+      alt={@candidate.nama}
+      class="w-32 h-40 object-cover object-top"
+    />
+    <div style="text-wrap: balance" class="text-xs flex-1 flex justify-center items-center">
+      <%= @candidate.nama %>
     </div>
     """
   end
