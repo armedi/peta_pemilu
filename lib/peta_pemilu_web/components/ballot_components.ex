@@ -8,7 +8,7 @@ defmodule PetaPemiluWeb.BallotComponents do
   def page_header(assigns = %{jenis_dapil: :dpd}) do
     ~H"""
     <div
-      style={"background-image: #{assigns.background_image}"}
+      style={"background-image: #{@background_image}"}
       class="bg-left-bottom bg-[length:auto_2rem] bg-repeat-x pb-8 mb-12 text-center"
     >
       <h1
@@ -27,7 +27,7 @@ defmodule PetaPemiluWeb.BallotComponents do
   def page_header(assigns = %{jenis_dapil: :dpr}) do
     ~H"""
     <div
-      style={"background-image: #{assigns.background_image}"}
+      style={"background-image: #{@background_image}"}
       class="bg-left-bottom bg-[length:auto_2rem] bg-repeat-x pb-8 mb-12 text-center"
     >
       <h1 class="bg-[#e6d256] pt-6 px-8 uppercase font-bold text-xl" style="text-wrap: balance;">
@@ -43,7 +43,7 @@ defmodule PetaPemiluWeb.BallotComponents do
   def page_header(assigns = %{jenis_dapil: :dprd_prov}) do
     ~H"""
     <div
-      style={"background-image: #{assigns.background_image}"}
+      style={"background-image: #{@background_image}"}
       class="bg-left-bottom bg-[length:auto_2rem] bg-repeat-x pb-8 mb-12 text-center"
     >
       <h1
@@ -62,7 +62,7 @@ defmodule PetaPemiluWeb.BallotComponents do
   def page_header(assigns = %{jenis_dapil: :dprd_kabko}) do
     ~H"""
     <div
-      style={"background-image: #{assigns.background_image}"}
+      style={"background-image: #{@background_image}"}
       class="bg-left-bottom bg-[length:auto_2rem] bg-repeat-x pb-8 mb-12 text-center"
     >
       <h1
@@ -95,7 +95,7 @@ defmodule PetaPemiluWeb.BallotComponents do
     ~H"""
     <div class={
       [
-        if Map.has_key?(assigns, :jenis_dapil) && assigns.jenis_dapil == :dpd do
+        if Map.has_key?(assigns, :jenis_dapil) && @jenis_dapil == :dpd do
           # Enum.with_index(272..1152//144, fn val, idx ->
           #   "min-[#{val}px]:w-[calc(8rem*#{idx + 2}+#{idx + 1}rem)]"
           # end)
@@ -151,13 +151,18 @@ defmodule PetaPemiluWeb.BallotComponents do
                 <%= if c["id"] do %>
                   <a
                     href={
-                      "/caleg/#{case assigns.jenis_dapil do
+                      # "/caleg/#{case @jenis_dapil do
+                      #   :dpr -> "dpr"
+                      #   :dprd_prov -> "dprd-prov"
+                      #   :dprd_kabko -> "dprd-kabko"
+                      # end}/#{@dapil_slug}/#{URI.encode_www_form(c["id"])}"
+
+                      "/caleg/#{case @jenis_dapil do
                         :dpr -> "dpr"
                         :dprd_prov -> "dprd-prov"
                         :dprd_kabko -> "dprd-kabko"
-                      end}/#{assigns.dapil_slug}/#{URI.encode_www_form(c["id"])}"
+                      end}/#{@dapil_slug}/#{party.partai_slug}/#{c["nomor_urut"]}"
                     }
-                    target="_blank"
                     class="block w-full py-2 px-4 whitespace-nowrap truncate before:content-[counter(listCounter)] before:text-right before:inline-block before:w-4 before:mr-4 after:content-['.'] after:absolute after:left-8"
                   >
                     <%= c["nama"] %>

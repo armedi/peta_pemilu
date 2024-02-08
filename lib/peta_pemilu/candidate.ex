@@ -31,6 +31,7 @@ defmodule PetaPemilu.Candidate do
                  nomor_urut_partai: p.nomor_urut,
                  foto_partai: p.foto,
                  partai: p.nama,
+                 partai_slug: p.slug,
                  nomor_urut: cd.nomor_urut,
                  foto: cd.foto,
                  nama: cd.nama,
@@ -42,6 +43,7 @@ defmodule PetaPemilu.Candidate do
              nomor_urut_partai: c.nomor_urut_partai,
              foto_partai: c.foto_partai,
              partai: c.partai,
+             partai_slug: c.partai_slug,
              caleg:
                fragment(
                  "json_agg(json_build_object('nomor_urut', ?, 'foto', ?, 'nama', ?, 'id', ?))",
@@ -51,7 +53,7 @@ defmodule PetaPemilu.Candidate do
                  c.id_calon
                )
            },
-           group_by: [c.nomor_urut_partai, c.foto_partai, c.partai],
+           group_by: [c.nomor_urut_partai, c.foto_partai, c.partai, c.partai_slug],
            order_by: [c.nomor_urut_partai]
 
     PetaPemilu.Repo.all(query)
@@ -70,6 +72,7 @@ defmodule PetaPemilu.Candidate do
                  nomor_urut_partai: p.nomor_urut,
                  foto_partai: p.foto,
                  partai: p.nama,
+                 partai_slug: p.slug,
                  nomor_urut: cd.nomor_urut,
                  foto: cd.foto,
                  nama: cd.nama,
@@ -81,6 +84,7 @@ defmodule PetaPemilu.Candidate do
              nomor_urut_partai: c.nomor_urut_partai,
              foto_partai: c.foto_partai,
              partai: c.partai,
+             partai_slug: c.partai_slug,
              caleg:
                fragment(
                  "json_agg(json_build_object('nomor_urut', ?, 'foto', ?, 'nama', ?, 'id', ?))",
@@ -90,7 +94,7 @@ defmodule PetaPemilu.Candidate do
                  c.id_calon
                )
            },
-           group_by: [c.nomor_urut_partai, c.foto_partai, c.partai],
+           group_by: [c.nomor_urut_partai, c.foto_partai, c.partai, c.partai_slug],
            order_by: [c.nomor_urut_partai]
 
     PetaPemilu.Repo.all(query)
@@ -109,6 +113,7 @@ defmodule PetaPemilu.Candidate do
                  nomor_urut_partai: p.nomor_urut,
                  foto_partai: p.foto,
                  partai: p.nama,
+                 partai_slug: p.slug,
                  nomor_urut: cd.nomor_urut,
                  foto: cd.foto,
                  nama: cd.nama,
@@ -120,6 +125,7 @@ defmodule PetaPemilu.Candidate do
              nomor_urut_partai: c.nomor_urut_partai,
              foto_partai: c.foto_partai,
              partai: c.partai,
+             partai_slug: c.partai_slug,
              caleg:
                fragment(
                  "json_agg(json_build_object('nomor_urut', ?, 'foto', ?, 'nama', ?, 'id', ?))",
@@ -129,7 +135,7 @@ defmodule PetaPemilu.Candidate do
                  c.id_calon
                )
            },
-           group_by: [c.nomor_urut_partai, c.foto_partai, c.partai],
+           group_by: [c.nomor_urut_partai, c.foto_partai, c.partai, c.partai_slug],
            order_by: [c.nomor_urut_partai]
 
     PetaPemilu.Repo.all(query)
@@ -255,7 +261,7 @@ defmodule PetaPemilu.Candidate do
                ]
              ) do
           {:ok, response} ->
-            data = response.body["data"]
+            [data | _tail] = response.body["data"]
 
             PetaPemilu.Repo.update_all(
               from("caleg_dprd_prov", where: [id: ^caleg.id], update: [set: [profile: ^data]]),
@@ -299,7 +305,7 @@ defmodule PetaPemilu.Candidate do
                ]
              ) do
           {:ok, response} ->
-            data = response.body["data"]
+            [data | _tail] = response.body["data"]
 
             PetaPemilu.Repo.update_all(
               from("caleg_dprd_kabko", where: [id: ^caleg.id], update: [set: [profile: ^data]]),
