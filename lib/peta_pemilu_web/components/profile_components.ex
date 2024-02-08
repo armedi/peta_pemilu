@@ -67,7 +67,7 @@ defmodule PetaPemiluWeb.ProfileComponents do
       <%= unless is_nil(@candidate["riwayatPekerjaan"]) do %>
         <div class="mb-12">
           <h3 class="text-lg font-semibold mb-2">Riwayat Pekerjaan</h3>
-          <%= for job <- Enum.reverse(@candidate["riwayatPekerjaan"]) do %>
+          <%= for job <- @candidate["riwayatPekerjaan"] do %>
             <div class="mb-2">
               <h4 class="font-semibold"><%= job["namaPerusahaanLembaga"] %></h4>
               <div><%= job["jabatan"] %></div>
@@ -82,7 +82,7 @@ defmodule PetaPemiluWeb.ProfileComponents do
       <%= unless is_nil(@candidate["riwayatPendidikan"]) do %>
         <div class="mb-12">
           <h3 class="text-lg font-semibold mb-2">Riwayat Pendidikan</h3>
-          <%= for education <- Enum.reverse(@candidate["riwayatPendidikan"]) do %>
+          <%= for education <- @candidate["riwayatPendidikan"] do %>
             <div class="mb-2">
               <h4 class="font-semibold"><%= education["namaInstitusi"] %></h4>
               <div><%= education["jenjangPendidikan"] %></div>
@@ -97,7 +97,7 @@ defmodule PetaPemiluWeb.ProfileComponents do
       <%= unless is_nil(@candidate["riwayatKursusDiklat"]) do %>
         <div class="mb-12">
           <h3 class="text-lg font-semibold mb-2">Riwayat Kursus dan Diklat</h3>
-          <%= for course <- Enum.reverse(@candidate["riwayatKursusDiklat"]) do %>
+          <%= for course <- @candidate["riwayatKursusDiklat"] do %>
             <div class="mb-2">
               <h4 class="font-semibold"><%= course["namaKursus"] %></h4>
               <div><%= course["lembagaPenyelenggara"] %></div>
@@ -113,7 +113,7 @@ defmodule PetaPemiluWeb.ProfileComponents do
       <%= unless is_nil(@candidate["riwayatOrganisasi"]) do %>
         <div class="mb-12">
           <h3 class="text-lg font-semibold mb-2">Riwayat Organisasi</h3>
-          <%= for org <- Enum.reverse(@candidate["riwayatOrganisasi"]) do %>
+          <%= for org <- @candidate["riwayatOrganisasi"] do %>
             <div class="mb-2">
               <h4 class="font-semibold"><%= org["namaOrganisasi"] %></h4>
               <div><%= org["jabatan"] %></div>
@@ -128,7 +128,7 @@ defmodule PetaPemiluWeb.ProfileComponents do
       <%= unless is_nil(@candidate["riwayatPenghargaan"]) do %>
         <div class="mb-12">
           <h3 class="text-lg font-semibold mb-2">Riwayat Penghargaan</h3>
-          <%= for prize <- Enum.reverse(@candidate["riwayatPenghargaan"]) do %>
+          <%= for prize <- @candidate["riwayatPenghargaan"] do %>
             <div class="mb-2">
               <h4 class="font-semibold"><%= prize["namaPenghargaan"] %></h4>
               <div><%= prize["lembaga"] %></div>
