@@ -20,6 +20,12 @@ defmodule PetaPemiluWeb.Live.Dpr do
     dapil = String.split(dapil_slug, "-") |> Enum.join(" ")
     parties = PetaPemilu.Candidate.by_dapil(:dpr, dapil_slug)
 
-    {:ok, assign(socket, dapil_slug: dapil_slug, dapil: dapil, parties: parties)}
+    {:ok,
+     assign(socket,
+       page_title: "Caleg DPR Dapil #{String.upcase(dapil)}",
+       dapil_slug: dapil_slug,
+       dapil: dapil,
+       parties: parties
+     )}
   end
 end

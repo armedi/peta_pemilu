@@ -20,6 +20,11 @@ defmodule PetaPemiluWeb.Live.DprdKabko.CandidateProfile do
         candidate_number: String.to_integer(candidate_number)
       })
 
-    {:ok, assign(socket, candidate: candidate)}
+    {:ok,
+     assign(socket,
+       page_title:
+         "Caleg DPRD Kabupaten/Kota Dapil #{candidate["namaDapil"]} • #{candidate["namaPartai"]}, Nomor Urut #{candidate_number}",
+       candidate: candidate
+     )}
   end
 end

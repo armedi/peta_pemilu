@@ -54,6 +54,12 @@ defmodule PetaPemiluWeb.Live.Dpd do
     dapil = String.split(dapil_slug, "-") |> Enum.join(" ")
     candidates = PetaPemilu.Candidate.by_dapil(:dpd, dapil_slug)
 
-    {:ok, assign(socket, dapil_slug: dapil_slug, dapil: dapil, candidates: candidates)}
+    {:ok,
+     assign(socket,
+       page_title: "Caleg DPD Dapil #{String.upcase(dapil)}",
+       dapil_slug: dapil_slug,
+       dapil: dapil,
+       candidates: candidates
+     )}
   end
 end
