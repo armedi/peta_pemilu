@@ -60,8 +60,18 @@ defmodule PetaPemiluWeb.ProfileComponents do
       <% end %>
 
       <div class="mb-12">
-        <h3 class="text-lg font-semibold mb-2">Pekerjaan</h3>
-        <p><%= @candidate["pekerjaan"] %></p>
+        <h3 class="inline-block text-lg font-semibold mb-2 after:content-[':']">Usia</h3>
+        <p class="inline-block"><%= @candidate["usia"] %> tahun</p>
+      </div>
+
+      <div class="mb-12">
+        <h3 class="inline-block text-lg font-semibold mb-2 after:content-[':']">Status Hukum</h3>
+        <p class="inline-block"><%= @candidate["statusHukum"] %></p>
+      </div>
+
+      <div class="mb-12">
+        <h3 class="inline-block text-lg font-semibold mb-2 after:content-[':']">Pekerjaan</h3>
+        <p class="inline-block"><%= @candidate["pekerjaan"] %></p>
       </div>
 
       <%= unless is_nil(@candidate["riwayatPekerjaan"]) do %>
