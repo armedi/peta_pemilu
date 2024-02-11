@@ -71,6 +71,17 @@ defmodule PetaPemiluWeb.ProfileComponents do
       </div>
 
       <div class="mb-12">
+        <h3 class="inline-block text-lg font-semibold mb-2 after:content-[':']">Agama</h3>
+        <p class="inline-block">
+          <%= if @candidate["agama"] do %>
+            <%= @candidate["agama"] %>
+          <% else %>
+            -
+          <% end %>
+        </p>
+      </div>
+
+      <div class="mb-12">
         <h3 class="inline-block text-lg font-semibold mb-2 after:content-[':']">Status Hukum</h3>
         <p class="inline-block">
           <%= if @candidate["statusHukum"] do %>
