@@ -61,18 +61,34 @@ defmodule PetaPemiluWeb.ProfileComponents do
 
       <div class="mb-12">
         <h3 class="inline-block text-lg font-semibold mb-2 after:content-[':']">Usia</h3>
-        <p class="inline-block"><%= @candidate["usia"] %> tahun</p>
+        <p class="inline-block">
+          <%= if @candidate["usia"] do %>
+            <%= @candidate["usia"] %> tahun
+          <% else %>
+            -
+          <% end %>
+        </p>
       </div>
 
       <div class="mb-12">
         <h3 class="inline-block text-lg font-semibold mb-2 after:content-[':']">Status Hukum</h3>
-        <p class="inline-block"><%= @candidate["statusHukum"] %></p>
+        <p class="inline-block">
+          <%= if @candidate["statusHukum"] do %>
+            <%= @candidate["statusHukum"] %>
+          <% else %>
+            -
+          <% end %>
+        </p>
       </div>
 
-      <div class="mb-12">
-        <h3 class="inline-block text-lg font-semibold mb-2 after:content-[':']">Pekerjaan</h3>
-        <p class="inline-block"><%= @candidate["pekerjaan"] %></p>
-      </div>
+      <%= unless is_nil(@candidate["pekerjaan"]) do %>
+        <div class="mb-12">
+          <h3 class="inline-block text-lg font-semibold mb-2 after:content-[':']">Pekerjaan</h3>
+          <p class="inline-block">
+            <%= @candidate["pekerjaan"] %>
+          </p>
+        </div>
+      <% end %>
 
       <%= unless is_nil(@candidate["riwayatPekerjaan"]) do %>
         <div class="mb-12">
